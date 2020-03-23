@@ -1,0 +1,54 @@
+{% extends '../home/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | sign in {% endblock title %}
+
+{% block content %}
+
+<!-- banner-slider-about -->
+<div class="w3l_banner_info two">
+  <h3><a href="{% url 'signup' %}">Registro</a></h3>
+</div>
+<div class="clearfix"></div>
+
+<!-- //banner-slider-about -->
+<div class="mail">
+  <div class="container">
+    <div class="clearfix"> </div>
+    <div class="w3l_contact_grids">
+      <form action="{% url 'signup' %}" method="post">
+        {% csrf_token %}
+        <div class="col-md-6 w3l_contact_grid_left">
+          <label><span>Nombre:</span></label><br>{{user_form.first_name}}<br><br>
+          <label><span>Apellidos:</span></label>{{user_form.last_name}}<br><br>
+          <label><span>Identificación:</span></label>{{user_extension_form.identificacion}}<br><br>
+          <label><span>Nombre de Usuario:</span></label>{{user_form.username}}
+            <small style="color: grey">{{ user_form.username.help_text }}</small><br><br>
+          <label><span>Correo Electronico:</span></label>{{user_form.email}}<br><br>
+          <label><span>Telefono:</span></label>{{user_extension_form.telefono}}<br><br>
+        </div>
+        <div class="col-md-6 w3l_contact_grid_left">
+          <label><span>Fecha de Nacimiento:</span></label><br>{{user_extension_form.fecha_nacimiento}}<br><br>
+          <label><span>Dirección:</span></label><br>{{user_extension_form.direccion}}<br><br>
+          <label><span>Contraseña:</span></label>{{user_form.password1}}
+            <small style="color: grey">{{ user_form.password1.help_text }}</small><br>
+          <label><span>Contraseña (Confirmación):</span></label>{{user_form.password2}}<br><br>
+          {% if user_form.errors or user_extension_form.errors %}
+          <div class="alert alert-danger" role="alert">
+            <ul>
+              {% for key,value in user_extension_form.errors.items %}
+                <li>{{ value|escape }}</li>
+              {% endfor %}
+              {% for key,value in user_form.errors.items %}
+                <li>{{ value|escape }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+        <input type="submit" value="Registrarme" />
+      </form>
+    </div>
+  </div>
+</div
+{% endblock content %}

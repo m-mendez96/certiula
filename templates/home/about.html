@@ -1,0 +1,155 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | about {% endblock title %}
+
+{% block content %}
+	<!-- banner-slider-about -->
+	<div class="w3l_banner_info two">
+		<h3><a href="{% url 'about' %}">Sobre Certiula</a></h3>
+	</div>
+	<div class="clearfix"></div>
+	<!-- //banner-slider-about -->
+
+	<!--about-inner-page-->
+	<div class="w3-about" id="about">
+		<div class="container">
+			<div class="about-head">
+				<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry sed do eiusmod tempor incididunt incididunt ut labore et dolore magna aliqua Ut.</p>
+			</div>
+			<div class="about-info">
+				<img src="{% static 'images/about.jpg' %}" alt="about-image">
+				<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam".</p>
+				<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam". </p>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<!--//about-inner-page-->
+
+	<!-- team-inner-page -->
+	<div class="team">
+		<div class="container">
+			<h3>Oficina Central de Grados y Registro de Egresados (OCGRE)</h3>
+			<div class="w3l_team_grids">
+				<div class="col-md-3 w3l_team_grid">
+					<div class="view view-second">
+						<img src="{% static 'images/te2.jpg' %}" alt=" " class="img-responsive" />
+						<div class="mask"></div>
+						<div class="content">
+							<div class="w3l_social_icons w3l_social_icons1">
+								<ul>
+									<li><a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="google_plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="pinterest"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<h4>Rita James</h4>
+					<p>Unidad de Archivo</p>
+				</div>
+				<div class="col-md-3 w3l_team_grid">
+					<div class="view view-second">
+						<img src="{% static 'images/te1.jpg' %}" alt=" " class="img-responsive" />
+						<div class="mask"></div>
+						<div class="content">
+							<div class="w3l_social_icons w3l_social_icons1">
+								<ul>
+									<li><a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="google_plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="pinterest"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<h4>Dino Jass</h4>
+					<p>Unidad de Receptoria</p>
+				</div>
+				<div class="col-md-3 w3l_team_grid">
+					<div class="view view-second">
+						<img src="{% static 'images/te3.jpg' %}" alt=" " class="img-responsive" />
+						<div class="mask"></div>
+						<div class="content">
+							<div class="w3l_social_icons w3l_social_icons1">
+								<ul>
+									<li><a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="google_plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="pinterest"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<h4>Michael Doe</h4>
+					<p>Unidad de Procesamiento</p>
+				</div>
+				<div class="col-md-3 w3l_team_grid">
+					<div class="view view-second">
+						<img src="{% static 'images/te4.jpg' %}" alt=" " class="img-responsive" />
+						<div class="mask"></div>
+						<div class="content">
+							<div class="w3l_social_icons w3l_social_icons1">
+								<ul>
+									<li><a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="google_plus"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+									<li><a href="#" class="pinterest"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<h4>Mariya Thomas</h4>
+					<p>Unidad de Informatica</p>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+		</div>
+	</div>
+	<!-- //team-inner-page -->
+
+	<!-- autoridades -->
+	<div id="testimonials" class="review">
+		<div class="container">
+			<h2 class="title-w3">Autoridades Universitarias de Certificación</h2>
+			<div class="test-monials">
+				<!--//screen-gallery-->
+				<div class="sreen-gallery-cursual">
+					<div id="owl-demo" class="owl-carousel">
+						<div class="item-owl">
+							<div class="test-review">
+								<p><img src="{% static 'images/left-quote.png' %}" alt="">Rector...Lorem ipsum dolor sit ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<img src="{% static 'images/right-quote.png' %}" alt=""></p>
+								<div class="img-agile">
+									<img src="{% static 'images/t1.jpg' %}" class="img-responsive" alt=""/>
+								</div>
+								<h5>Mario Bonucci</h5>
+							</div>
+						</div>
+						<div class="item-owl">
+							<div class="test-review">
+								<p> <img src="{% static 'images/left-quote.png' %}" alt="">Secretario...Lorem ipsum dolor sit ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<img src="{% static 'images/right-quote.png' %}" alt=""></p>
+								<div class="img-agile">
+									<img src="{% static 'images/t2.jpg' %}" class="img-responsive" alt=""/>
+								</div>
+								<h5>José Andérez</h5>
+							</div>
+						</div>
+						<div class="item-owl">
+							<div class="test-review">
+								<p><img src="{% static 'images/left-quote.png' %}" alt="">Coordinador OCGRE...Lorem ipsum dolor sit ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<img src="{% static 'images/right-quote.png' %}" alt=""></p>
+								<div class="img-agile">
+									<img src="{% static 'images/t3.jpg' %}" class="img-responsive" alt=""/>
+								</div>
+								<h5>Natalia</h5>
+							</div>
+						</div>
+					</div>
+					<!--//screen-gallery-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //testimonials-ends-here -->
+{% endblock content %}
