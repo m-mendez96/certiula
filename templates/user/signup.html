@@ -21,7 +21,8 @@
         <div class="col-md-6 w3l_contact_grid_left">
           <label><span>Nombre:</span></label><br>{{user_form.first_name}}<br><br>
           <label><span>Apellidos:</span></label>{{user_form.last_name}}<br><br>
-          <label><span>Identificación:</span></label>{{user_extension_form.identificacion}}<br><br>
+          <label><span>Identificación:</span></label>{{user_extension_form.identificacion}}
+            <small style="color: grey">{{ user_extension_form.identificacion.help_text }}</small><br><br>
           <label><span>Nombre de Usuario:</span></label>{{user_form.username}}
             <small style="color: grey">{{ user_form.username.help_text }}</small><br><br>
           <label><span>Correo Electronico:</span></label>{{user_form.email}}<br><br>

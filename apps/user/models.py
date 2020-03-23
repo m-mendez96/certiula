@@ -1,9 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 # Modelo de Extension de Usuario
 class UserExtension(models.Model):
-    identificacion = models.CharField(primary_key=True,max_length = 10)
+    identificacion = models.CharField(primary_key=True, max_length = 10,help_text=("Venezolano (V-), Extranjero (E-), Pasaporte (P-)"),
+        validators=[
+            RegexValidator(
+                regex='^[V|E|P]\-[1-9][0-9]{6,9}$',
+                message="""Introduzca una indentificación válida de acuerdo al formato que corresponda (V-, E-, P-).
+                Sólo se permite una letra seguida de un guion y los números con una longitud de maximo 8 carácteres."""
+        )])
     fecha_nacimiento = models.DateField()
     telefono = models.CharField(max_length = 15)
     direccion = models.CharField(max_length = 150)
