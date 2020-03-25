@@ -9,6 +9,8 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 from .models import UserExtension
 from .forms import *
 from .tokens import account_activation_token
@@ -45,9 +47,9 @@ def Activate(request, uidb64, token):
         user.is_active = True
         user.save()
         auth.login(request, user)
-        return HttpResponse('Gracias por confirmar tu correo electrónico. Ahora puedes ingresar a tu cuenta.')
+        return render(request, 'user/confirmation_email.html',{})
     else:
-        return HttpResponse('Enlace de confirmación inválido.')
+        return render(request, 'user/invalid_link.html',{})
 
 def Signup(request):
     if request.method == 'POST':
@@ -66,10 +68,12 @@ def Signup(request):
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
                 'token':account_activation_token.make_token(user),
             })
+            text_content = strip_tags(message)
             to_email = user_form.cleaned_data.get('email')
-            email = EmailMessage(
+            email = EmailMultiAlternatives(
                         mail_subject, message, to=[to_email]
             )
+            email.attach_alternative(message, "text/html")
             email.send()
             return render(request, 'user/signup_done.html',{})
         else:
