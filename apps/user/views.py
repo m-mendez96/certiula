@@ -1,10 +1,17 @@
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.contrib import auth
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import UserExtension
 from .forms import *
+from .tokens import account_activation_token
 
 ## Views home
 class Home(ListView):
@@ -28,35 +35,49 @@ class Contact(ListView):
         return render(request,'home/contact.html')
 
 ## Views user
+def Activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        auth.login(request, user)
+        return HttpResponse('Gracias por confirmar tu correo electrónico. Ahora puedes ingresar a tu cuenta.')
+    else:
+        return HttpResponse('Enlace de confirmación inválido.')
+
 def Signup(request):
-    user_form = None
-    user_extension_form = None
-    if request.method == "POST":
+    if request.method == 'POST':
         user_form = UserForm(request.POST)
         user_extension_form = UserExtensionForm(request.POST)
-        if user_form.is_valid():
-            return redirect('index')
-            #if user_extension_form.is_valid()
+        if user_form.is_valid() and user_extension_form.is_valid():
+            # Falta el user_extension_form
+            user = user_form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Activación de la cuenta Certiula'
+            message = render_to_string('user/acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = user_form.cleaned_data.get('email')
+            email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return render(request, 'user/signup_done.html',{})
         else:
             return render(request, 'user/signup.html',{'user_extension_form':user_extension_form,'user_form':user_form})
-        #first_name = request.POST.get('First_name')
-        #last_name = request.POST.get('Last_name')
-        #id = request.POST.get('Id')
-        #phone = request.POST.get('Phone')
-        #birth_date = request.POST.get('Birth_date')
-        #home_address = request.POST.get('Home_address')
-        #email = request.POST.get('Email')
-        #username = request.POST.get('Username')
-        #password = request.POST.get('Password')
-        #password_confirm = request.POST.get('Password_confirm')
-        #user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,password=password)
-        #user.save()
-        #userextension = UserExtension.objects.create(usuario=user,identificacion=id,fecha_nacimiento=birth_date,telefono=phone,direccion=home_address)
-        #userextension.save()
-        return redirect('index')
-    user_form = UserForm
-    user_extension_form = UserExtensionForm
-    return render(request, 'user/signup.html',{'user_extension_form':user_extension_form,'user_form':user_form})
+    else:
+        user_form = UserForm
+        user_extension_form = UserExtensionForm
+        return render(request, 'user/signup.html',{'user_extension_form':user_extension_form,'user_form':user_form})
 
 def Login(request):
     username = request.POST['username']

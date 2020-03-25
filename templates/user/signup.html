@@ -17,7 +17,6 @@
     <div class="clearfix"> </div>
     <div class="w3l_contact_grids">
       <form action="{% url 'signup' %}" method="post">
-        {% csrf_token %}
         <div class="col-md-6 w3l_contact_grid_left">
           <label><span>Nombre:</span></label><br>{{user_form.first_name}}<br><br>
           <label><span>Apellidos:</span></label>{{user_form.last_name}}<br><br>
@@ -47,6 +46,7 @@
           </div>
           {% endif %}
         </div>
+        {% csrf_token %}
         <input type="submit" value="Registrarme" />
       </form>
     </div>

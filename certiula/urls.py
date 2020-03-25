@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url
 from apps.user.views import *
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     path('signup/',Signup, name = 'signup'),
     path('password/reset/',PasswordReset, name = 'passwordreset'),
     path('session/',Login, name='login'),
+    path('activate/<uidb64>/<token>/',Activate, name='activate'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

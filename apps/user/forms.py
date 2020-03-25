@@ -4,6 +4,8 @@ from .models import UserExtension
 from django.contrib.auth.models import User
 
 class UserForm(UserCreationForm):
+    email = forms.EmailField(max_length=200, help_text='Required')
+
     class Meta:
         model = User
         fields = ['first_name','last_name','username','email','password1','password2']
