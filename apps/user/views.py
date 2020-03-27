@@ -19,27 +19,6 @@ from .tokens import account_activation_token
 ## Unique email for user
 User._meta.get_field('email')._unique = True
 
-## Views home
-class Home(ListView):
-    def get(self,request,*args,**kwargs):
-        return render(request,'home/index.html')
-
-class About(ListView):
-    def get(self,request,*args,**kwargs):
-        return render(request,'home/about.html')
-
-class Services(ListView):
-    def get(self,request,*args,**kwargs):
-        return render(request,'home/services.html')
-
-class Instructives(ListView):
-    def get(self,request,*args,**kwargs):
-        return render(request,'home/instructives.html')
-
-class Contact(ListView):
-    def get(self,request,*args,**kwargs):
-        return render(request,'home/contact.html')
-
 ## Views user
 def Activate(request, uidb64, token):
     try:

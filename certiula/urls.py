@@ -17,15 +17,18 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import url
 from django.contrib.auth import views
+from django.views.generic.base import TemplateView
 from apps.user.views import *
 
 urlpatterns = [
+    ## Home
     path('admin/', admin.site.urls),
-    path('',Home.as_view(), name = 'index'),
-    path('about/',About.as_view(), name = 'about'),
-    path('services/',Services.as_view(), name = 'services'),
-    path('instructives/',Instructives.as_view(), name = 'instructives'),
-    path('contact/',Contact.as_view(), name = 'contact'),
+    path('', TemplateView.as_view(template_name='home/index.html'), name="index"),
+    path('about/', TemplateView.as_view(template_name='home/about.html'), name="about"),
+    path('services/',TemplateView.as_view(template_name='home/services.html'), name = 'services'),
+    path('instructives/',TemplateView.as_view(template_name='home/instructives.html'), name = 'instructives'),
+    path('contact/',TemplateView.as_view(template_name='home/contact.html'), name = 'contact'),
+    ## Registration
     path('signup/',Signup, name = 'signup'),
     path('session/',Login, name='login'),
     path('activate/<uidb64>/<token>/',Activate, name='activate'),
