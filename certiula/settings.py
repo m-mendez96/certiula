@@ -137,3 +137,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'certiula@gmail.com'
 EMAIL_HOST_PASSWORD = 'RewQ4321'
+
+## Logout redirect url
+LOGOUT_REDIRECT_URL = 'index'
