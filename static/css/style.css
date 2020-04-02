@@ -10,7 +10,7 @@ body {
 	padding:0;
 	margin:0;
 	background:#FFF;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'PT Sans', sans-serif;
 }
 body a {
 	transition:0.5s all;
@@ -36,7 +36,7 @@ input[type="button"],input[type="submit"] {
 h1, h2, h3, h4, h5, h6 {
 	margin: 0;
 	padding: 0;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'PT Sans', sans-serif;;
 }
 p {
 	margin:0;
@@ -653,7 +653,7 @@ h4.text {
 /*-- footer-starts-here --*/
 .footer-w3l {
     padding: 5em 0;
-    background:#111;
+    background:#1A2226;
 }
 .footer-grid h4 {
     font-size: 2em;
@@ -699,7 +699,7 @@ h4.text {
     text-decoration: none;
 }
 .footer-grid input[type="submit"]:hover {
-    background: #fff;
+    background: #005DAB;
     color: #222;
 	transition: 0.5s all;
     -webkit-transition: 0.5s all;
@@ -1217,7 +1217,7 @@ img.zoom-img:hover,.portfolio-grids:hover img.zoom-img{
 }
 .w3ls_map_color{
 	width:100%;
-	background:rgba(0, 0, 0, 0.92);
+	background:rgba(26, 34, 38, 0.92);
 }
 .contact-bottom-grid{
 	text-align:center;

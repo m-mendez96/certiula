@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.conf.urls import url
 from django.contrib.auth import views
+from django.contrib.auth.views import LogoutView
 from django.views.generic.base import TemplateView
 from apps.user.views import *
 
@@ -41,6 +42,8 @@ urlpatterns = [
         {'template_name' : 'registration/password_reset_confirm.html'}, name='password_reset_confirm'),
     path('password/reset/complete/', views.PasswordResetCompleteView.as_view(),
         {'template_name' : 'registration/password_reset_complete.html'}, name='password_reset_complete'),
+    ## Logout
+    path('logout/',LogoutView.as_view(), name='logout'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

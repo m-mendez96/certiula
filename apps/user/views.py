@@ -80,6 +80,7 @@ def Login(request):
             return redirect('admin:index')
         else:
             auth.login(request, user)
-            return redirect('index')
+            return render(request, 'user/base.html',{})
+            #return redirect('index')
     else:
         return HttpResponse('Usuario o Contraseña Invalido o Cuenta Inactiva')
