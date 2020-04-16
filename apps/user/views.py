@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
 from django.contrib.auth.decorators import user_passes_test
-from .models import UserExtension
+from .models import *
 from .forms import *
 from .tokens import account_activation_token
 
@@ -78,9 +78,14 @@ def Login(request):
             auth.login(request, user)
             # Redirect to a view admintrator.
             return redirect('admin:index')
-        else:
+        if Authority.objects.filter(usuario__usuario = user).exists():
             auth.login(request, user)
-            return render(request, 'user/base.html',{})
-            #return redirect('index')
+            return HttpResponse('Es una Autoridad')
+        if FunctionalUnit.objects.filter(usuario = user).exists():
+            auth.login(request, user)
+            return HttpResponse('Es una Unidad Funcional')
+        auth.login(request, user)
+        usuario = UserExtension.objects.get(usuario = user)
+        return render(request, 'user/base.html',{'usuario':usuario, 'user':user})
     else:
         return HttpResponse('Usuario o Contraseña Invalido o Cuenta Inactiva')

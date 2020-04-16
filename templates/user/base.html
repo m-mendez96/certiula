@@ -117,62 +117,6 @@
 			<div class="profile_details_left">
 				{% block notifications %}
 				<!--notifications of menu start -->
-				<ul class="nofitications-dropdown">
-					<li class="dropdown head-dpdn">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-envelope"></i><span class="badge">4</span></a>
-            <ul class="dropdown-menu">
-						<li>
-							<div class="notification_header">
-								<h3>You have 3 new messages</h3>
-              </div>
-            </li>
-            <li>
-							<a href="#">
-								<div class="user_img"><img src="{% static 'images/1.jpg' %}" alt=""></div>
-								<div class="notification_desc">
-									<p>Lorem ipsum dolor amet</p>
-									<p><span>1 hour ago</span></p>
-                </div>
-                <div class="clearfix"></div>
-              </a>
-						</li>
-						<li class="odd">
-							<a href="#">
-                <div class="user_img"><img src="{% static 'images/4.jpg' %}" alt=""></div>
-                <div class="notification_desc">
-                  <p>Lorem ipsum dolor amet </p>
-                  <p><span>1 hour ago</span></p>
-                </div>
-  							<div class="clearfix"></div>
-  						</a>
-						</li>
-  					<li>
-							<a href="#">
-								<div class="user_img"><img src="{% static 'images/3.jpg' %}" alt=""></div>
-  							<div class="notification_desc">
-  								<p>Lorem ipsum dolor amet </p>
-  								<p><span>1 hour ago</span></p>
-  							</div>
-  							<div class="clearfix"></div>
-  						</a>
-						</li>
-  					<li>
-							<a href="#">
-								<div class="user_img"><img src="{% static 'images/2.jpg' %}" alt=""></div>
-								<div class="notification_desc">
-  								<p>Lorem ipsum dolor amet </p>
-  								<p><span>1 hour ago</span></p>
-  							</div>
-  							<div class="clearfix"></div>
-  						</a>
-						</li>
-						<li>
-							<div class="notification_bottom">
-  							<a href="#">See all messages</a>
-  						</div>
-  					</li>
-  					</ul>
-  				</li>
   				<li class="dropdown head-dpdn">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">4</span></a>
   				<ul class="dropdown-menu">
@@ -243,10 +187,10 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						{% block profile %}
 							<div class="profile_img">
-  							<span class="prfil-img"><img src="{% static 'images/2.jpg' %}" alt=""> </span>
+  							<span class="prfil-img"><img src="{{ usuario.foto_perfil.url }}" class="img-circle"> </span>
   							<div class="user-name">
-  								<p>Admin Name</p>
-  								<span>Administrator</span>
+  								<p>{{user.first_name}} {{user.last_name}}</p>
+  								<span>{{user.username}}</span>
   							</div>
   							<i class="fa fa-angle-down lnr"></i>
   							<i class="fa fa-angle-up lnr"></i>
