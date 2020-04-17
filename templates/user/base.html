@@ -70,7 +70,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 	    		</button>
-					<h1><a class="navbar-brand" href="#"><img src="{% static 'images/i.png' %}" alt=""/></span></a></h1>
+					<h1><a class="navbar-brand" href="{% url 'initial_user' %}"><img src="{% static 'images/i.png' %}" alt=""/></span></a></h1>
     		</div>
 			{% block menu %}
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -185,9 +185,12 @@
 				<ul>
 					<li class="dropdown profile_details_drop">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						{% block profile %}
 							<div class="profile_img">
-  							<span class="prfil-img"><img src="#" class="img-circle"> </span>
+								{% if usuario.foto_perfil %}
+									<span class="prfil-img"><img src="../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50"> </span>
+								{% else %}
+									<span class="prfil-img"><img src="{% static 'media/profile/user.png' %}" class="img-circle" width="50" height="50"> </span>
+								{% endif %}
   							<div class="user-name">
   								<p>{{user.first_name}} {{user.last_name}}</p>
   								<span>{{user.username}}</span>
@@ -196,11 +199,10 @@
   							<i class="fa fa-angle-up lnr"></i>
   							<div class="clearfix"></div>
   						</div>
-						{% endblock profile %}
   					</a>
   					<ul class="dropdown-menu drp-mnu">
   						<li> <a href="#"><i class="fa fa-user"></i> Mi Cuenta</a> </li>
-  						<li> <a href="#"><i class="fa fa-suitcase"></i> Perfil</a> </li>
+  						<li> <a href="{% url 'profile' %}"><i class="fa fa-suitcase"></i> Perfil</a> </li>
   						<li> <a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Cerrar Sesión</a> </li>
   					</ul>
   				</li>

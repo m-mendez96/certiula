@@ -14,7 +14,7 @@ class UserExtension(models.Model):
     fecha_nacimiento = models.DateField()
     telefono = models.CharField(max_length = 15)
     direccion = models.CharField(max_length = 150)
-    foto_perfil =  models.ImageField ('Foto Perfil', upload_to = 'profile/', blank=True, null = True)
+    foto_perfil =  models.ImageField ('Foto Perfil', upload_to = 'profile/', blank=True, null = True, default='profile/user.png')
     usuario = models.OneToOneField(User, on_delete =models.CASCADE, blank = False, null = False)
 
     class Meta:

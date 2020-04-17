@@ -32,7 +32,9 @@ urlpatterns = [
     path('contact/',TemplateView.as_view(template_name='home/contact.html'), name = 'contact'),
     ## Login
     path('login/',Login.as_view(), name='login'),
-    path('session/',Initial_User.as_view(),name='initial_user'),
+    path('session/',login_required(Initial_User.as_view()),name='initial_user'),
+    ## Profile
+    path('session/profile/',login_required(Profile.as_view()), name = 'profile'),
     ## Registration
     path('signup/',Signup, name = 'signup'),
     path('activate/<uidb64>/<token>/',Activate, name='activate'),

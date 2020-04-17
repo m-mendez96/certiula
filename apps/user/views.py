@@ -91,19 +91,24 @@ class Login(FormView):
         return super(Login, self).form_valid(form)
 
 class Initial_User(ListView):
-        def get(self,request,*args,**kwargs):
-            user = User.objects.get(username=self.request.user)
-            if user is not None and user.is_active:
-                if user.is_superuser:
-                    return redirect('admin:index')
-                if Authority.objects.filter(usuario__usuario = user).exists():
-                    message = 'Es una Autoridad'
-                    usuario = UserExtension.objects.get(usuario = user)
-                    return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
-                if FunctionalUnit.objects.filter(usuario = user).exists():
-                    message = 'Es una Unidad Funcional'
-                    usuario = None
-                    return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
-                usuario = UserExtension.objects.get(usuario = user)
-                message = 'Es un Usuario'
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        if user is not None and user.is_active:
+            if user.is_superuser:
+                return redirect('admin:index')
+            if Authority.objects.filter(usuario__usuario = user).exists():
+                message = 'Es una Autoridad'
+                usuario = UserExtension.objects.get(usuario = self.request.user)
                 return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+            if FunctionalUnit.objects.filter(usuario = user).exists():
+                message = 'Es una Unidad Funcional'
+                usuario = None
+                return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+            usuario = UserExtension.objects.get(usuario = self.request.user)
+            message = 'Es un Usuario'
+            return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+
+class Profile(ListView):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        return render(request, 'user/profile.html',{'user':user})
