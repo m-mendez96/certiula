@@ -30,9 +30,11 @@ urlpatterns = [
     path('services/',TemplateView.as_view(template_name='home/services.html'), name = 'services'),
     path('instructives/',TemplateView.as_view(template_name='home/instructives.html'), name = 'instructives'),
     path('contact/',TemplateView.as_view(template_name='home/contact.html'), name = 'contact'),
+    ## Login
+    path('login/',Login.as_view(), name='login'),
+    path('session/',Initial_User.as_view(),name='initial_user'),
     ## Registration
     path('signup/',Signup, name = 'signup'),
-    path('session/',Login, name='login'),
     path('activate/<uidb64>/<token>/',Activate, name='activate'),
     path('password/reset/',views.PasswordResetView.as_view(html_email_template_name='registration/password_reset_html_email.html'),
         {'template_name':'registration/password_reset_form.html'}, name='password_reset'),

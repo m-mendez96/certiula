@@ -187,7 +187,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 						{% block profile %}
 							<div class="profile_img">
-  							<span class="prfil-img"><img src="{{ usuario.foto_perfil.url }}" class="img-circle"> </span>
+  							<span class="prfil-img"><img src="#" class="img-circle"> </span>
   							<div class="user-name">
   								<p>{{user.first_name}} {{user.last_name}}</p>
   								<span>{{user.username}}</span>
@@ -215,7 +215,9 @@
   <!-- main content start-->
   <div id="page-wrapper">
   	<div class="main-page">
-      {% block content %}{% endblock content %}
+      {% block content %}
+			<h2>{{message}}</h2>
+			{% endblock content %}
   	</div>
   </div>
 
