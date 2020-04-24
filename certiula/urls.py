@@ -35,6 +35,9 @@ urlpatterns = [
     path('session/',login_required(Initial_User.as_view()),name='initial_user'),
     ## Profile
     path('session/profile/',login_required(Profile.as_view()), name = 'profile'),
+    path('session/profile/edit',login_required(EditProfile), name = 'edit_profile'),
+    ## Account
+    path('session/account/',login_required(Account.as_view()), name = 'account'),
     ## Registration
     path('signup/',Signup, name = 'signup'),
     path('activate/<uidb64>/<token>/',Activate, name='activate'),

@@ -34,3 +34,13 @@ class UserExtensionForm(forms.ModelForm):
             'telefono':forms.TextInput(attrs={'placeholder': 'ej. +58 412 1002038'}),
             'direccion':forms.TextInput(attrs={'placeholder': 'ej. Av. Las Americas, Residencias El Parque, ...'})
         }
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','email']
+
+class EditUserExtensionForm(forms.ModelForm):
+    class Meta:
+        model = UserExtension
+        fields = ['telefono','direccion','foto_perfil']

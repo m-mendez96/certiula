@@ -111,4 +111,28 @@ class Initial_User(ListView):
 class Profile(ListView):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
-        return render(request, 'user/profile.html',{'user':user})
+        user_form = EditUserForm(instance=request.user)
+        user_extension_form = EditUserExtensionForm(instance=request.user.userextension)
+        if FunctionalUnit.objects.filter(usuario = user).exists():
+            usuario = None
+        else:
+            usuario = UserExtension.objects.get(usuario = self.request.user)
+        return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form})
+
+class Account(ListView):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        if FunctionalUnit.objects.filter(usuario = user).exists():
+            usuario = None
+        else:
+            usuario = UserExtension.objects.get(usuario = self.request.user)
+        return render(request, 'user/account.html',{'user':user,'usuario':usuario})
+
+def EditProfile(request):
+    if request.method == 'POST':
+        user_form = EditUserForm(request.POST, instance=request.user)
+        user_extension_form = EditUserExtensionForm(request.POST, request.FILES, instance=request.user.userextension)
+        if user_form.is_valid() and user_extension_form.is_valid():
+            user_form.save()
+            user_extension_form.save()
+        return redirect('profile')

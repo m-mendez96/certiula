@@ -187,7 +187,9 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 							<div class="profile_img">
 								{% if usuario.foto_perfil %}
-									<span class="prfil-img"><img src="../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50"> </span>
+										<span class="prfil-img">
+											<img src="../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+										</span>
 								{% else %}
 									<span class="prfil-img"><img src="{% static 'media/profile/user.png' %}" class="img-circle" width="50" height="50"> </span>
 								{% endif %}
@@ -201,8 +203,10 @@
   						</div>
   					</a>
   					<ul class="dropdown-menu drp-mnu">
-  						<li> <a href="#"><i class="fa fa-user"></i> Mi Cuenta</a> </li>
+  						<li> <a href="{% url 'account' %}"><i class="fa fa-user"></i> Mi Cuenta</a> </li>
+							{% if usuario is not None %}
   						<li> <a href="{% url 'profile' %}"><i class="fa fa-suitcase"></i> Perfil</a> </li>
+							{% endif %}
   						<li> <a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Cerrar Sesión</a> </li>
   					</ul>
   				</li>
@@ -216,7 +220,7 @@
 
   <!-- main content start-->
   <div id="page-wrapper">
-  	<div class="main-page">
+  	<div class="main-page general">
       {% block content %}
 			<h2>{{message}}</h2>
 			{% endblock content %}
