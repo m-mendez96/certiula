@@ -4,18 +4,111 @@
 {% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | account {% endblock title %}
 
 {% block content %}
-		<h2 class="title1">Mi Cuenta</h2>
-		<div class="panel-info widget-shadow">
-			<div class="col-md-6 panel-grids">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+<h2 class="title1">Cuenta</h2>
+	<div class="col-md-12 chart-layer1-right">
+		<div class="user-marorm">
+			<div class="malorm-bottom">
+					<p><img src="{% static 'images/i.png' %}"></p>
+					{% if usuario is not None %}
+						<div class="col-md-12">
+						{% if usuario_tipo.tipo is not None %}
+							<h2 class="title1">Cuenta de Autoridad</h2>
+							{% if usuario_tipo.tipo == 'AA' %}
+								<h2 class="title1">Autoridad de Acreditación</h2>
+							{% endif %}
+							{% if usuario_tipo.tipo == 'AC' %}
+								<h2 class="title1">Autoridad de Certificación</h2>
+							{% endif %}
+							{% if usuario_tipo.tipo == 'C' %}
+								<h2 class="title1">Certificador</h2>
+							{% endif %}
+						{% else %}
+							<h2 class="title1">Cuenta de Usuario</h2>
+						{% endif %}
+						</div>
+					{% else %}
+						<div class="col-md-12">
+							<h2 class="title1">Cuenta Organizacional de OCGRE</h2>
+							{% if usuario_tipo.unidad_id == 'UA' %}
+								<h2 class="title1">Unidad de Archivo</h2>
+							{% endif %}
+							{% if usuario_tipo.unidad_id == 'UP' %}
+								<h2 class="title1">Unidad de Procesamiento</h2>
+							{% endif %}
+							{% if usuario_tipo.unidad_id == 'UR' %}
+								<h2 class="title1">Unidad de Receptoria</h2>
+							{% endif %}
+						</div>
+					{% endif %}
+
+					<div class="col-md-12">
+						<div class="wrap">
+							<div class="bg-effect">
+								<ul class="bt-list">
+									<li><a href="#gridSystemModal" class="hvr-icon-rotate col-23" data-target="#gridSystemModal" data-toggle="modal">Modificar<br>Contraseña</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="modal fade" id="gridSystemModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+										<center><h4 class="modal-title" id="gridSystemModalLabel">Modificar Contraseña</h4></center>
+									</div>
+									<div class="modal-body">
+											<div class="form-body">
+												<form action="{% url 'change_password' %}" method="post">
+													{% csrf_token %}
+													<div class="form-group">
+															<label class="col-md-2 control-label"> </label>
+															<div class="col-md-12">
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="fa fa-key"></i>
+																	</span>
+																	<input type="password" class="form-control1" placeholder="Contraseña Antigua" name="old_password">
+																</div>
+															</div>
+													</div>
+													<div class="form-group">
+															<label class="col-md-2 control-label"> </label>
+															<div class="col-md-12">
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="fa fa-key"></i>
+																	</span>
+																	<input type="password" class="form-control1" placeholder="Contraseña Nueva" name="new_password1">
+																</div>
+															</div>
+													</div>
+													<div class="form-group">
+															<label class="col-md-2 control-label"> </label>
+															<div class="col-md-12">
+																<div class="input-group">
+																	<span class="input-group-addon">
+																		<i class="fa fa-key"></i>
+																	</span>
+																	<input type="password" class="form-control1" placeholder="Contraseña Nueva (Confirmación)" name="new_password2">
+																</div>
+															</div>
+													</div>
+													<p><br><br></p>
+													<center>
+														<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+														<button type="submit" class="btn btn-primary">Guardar Cambios</button>
+													</center>
+												</form>
+											</div>
+									</div>
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
 					</div>
-					<div class="panel-body">
-						Cuenta....
-					</div>
-				</div>
+
+				<div class="clearfix"></div>
 			</div>
-			<div class="clearfix"> </div>
 		</div>
+	</div>
+	<div class="clearfix"> </div>
 {% endblock content %}

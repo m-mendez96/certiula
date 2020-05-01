@@ -38,6 +38,8 @@ urlpatterns = [
     path('session/profile/edit',login_required(EditProfile), name = 'edit_profile'),
     ## Account
     path('session/account/',login_required(Account.as_view()), name = 'account'),
+    ## Password Change
+    path('session/account/password/change',login_required(change_password), name = 'change_password'),
     ## Registration
     path('signup/',Signup, name = 'signup'),
     path('activate/<uidb64>/<token>/',Activate, name='activate'),

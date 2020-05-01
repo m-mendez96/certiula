@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
@@ -122,11 +123,19 @@ class Profile(ListView):
 class Account(ListView):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
+        form = PasswordChangeForm(request.user)
         if FunctionalUnit.objects.filter(usuario = user).exists():
             usuario = None
-        else:
+            usuario_tipo = FunctionalUnit.objects.get(usuario = self.request.user)
+            return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
+        if Authority.objects.filter(usuario__usuario = user).exists():
             usuario = UserExtension.objects.get(usuario = self.request.user)
-        return render(request, 'user/account.html',{'user':user,'usuario':usuario})
+            usuario_tipo = Authority.objects.get(usuario__usuario = self.request.user)
+            return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
+        if UserExtension.objects.filter(usuario = user).exists():
+            usuario = UserExtension.objects.get(usuario = self.request.user)
+            usuario_tipo = None
+            return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
 
 def EditProfile(request):
     if request.method == 'POST':
@@ -136,3 +145,13 @@ def EditProfile(request):
             user_form.save()
             user_extension_form.save()
         return redirect('profile')
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('account')
+        else:
+            return redirect('account')
