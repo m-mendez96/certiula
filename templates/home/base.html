@@ -69,6 +69,9 @@
 					<div class="login-grids">
 						<div class="login">
 							<h2>Iniciar Sesión</h2>
+							{% if invalid_login is True %}
+								<center><h4><p style="color:red;">¡Usuario o Contraseña Incorrecta!</p></h4></center><br>
+							{% endif %}
 							<form action="{% url 'login' %}" method="post">
 								 {% csrf_token %}
 									 <input type="username" class="user" name="username" placeholder="Usuario" required="">
@@ -196,6 +199,14 @@
 		</script>
 		<!-- //for-testimonials -->
 		<!--//required-js-files-->
+
+		{% if invalid_login is True %}
+		  <script type="text/javascript">
+		      $(window).on('load',function(){
+		          $('#myModal11').modal('show');
+		      });
+		  </script>
+		{% endif %}
 
 		{% block extrajs %}{% endblock extrajs %}
 

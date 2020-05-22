@@ -18,9 +18,14 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
+from web3 import Web3, HTTPProvider
 from .models import *
 from .forms import *
 from .tokens import account_activation_token
+import requests
+
+## Web3 Blockchain Localhost
+w3 = Web3(HTTPProvider('http://localhost:8545'))
 
 ## Unique email for user
 User._meta.get_field('email')._unique = True
@@ -75,7 +80,7 @@ def Signup(request):
         return render(request, 'registration/signup.html',{'user_extension_form':user_extension_form,'user_form':user_form})
 
 class Login(FormView):
-    template_name = 'home/base.html'
+    template_name = 'home/index.html'
     form_class = LoginForm
     success_url = reverse_lazy ('initial_user')
 
@@ -91,16 +96,26 @@ class Login(FormView):
         login(self.request, form.get_user())
         return super(Login, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        invalid_login = True
+        kwargs['invalid_login'] = invalid_login
+        return kwargs
+
 class Initial_User(ListView):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
+        print(w3.eth.accounts[0])
         if user is not None and user.is_active:
             if user.is_superuser:
                 return redirect('admin:index')
             if Authority.objects.filter(usuario__usuario = user).exists():
                 message = 'Es una Autoridad'
                 usuario = UserExtension.objects.get(usuario = self.request.user)
-                return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+                autoridad = Authority.objects.get(usuario__usuario = user)
+                if autoridad.tipo is 'AA':
+                    return render(request, 'user/accreditation_authority.html',{'usuario':usuario, 'user':user, 'message':message})
+                else:
+                    return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
             if FunctionalUnit.objects.filter(usuario = user).exists():
                 message = 'Es una Unidad Funcional'
                 usuario = None
@@ -144,7 +159,17 @@ def EditProfile(request):
         if user_form.is_valid() and user_extension_form.is_valid():
             user_form.save()
             user_extension_form.save()
-        return redirect('profile')
+            return redirect('profile')
+        else:
+            user = User.objects.get(username=request.user)
+            user_form = EditUserForm(instance=request.user)
+            user_extension_form = EditUserExtensionForm(instance=request.user.userextension)
+            error_edit = True
+            if FunctionalUnit.objects.filter(usuario = user).exists():
+                usuario = None
+            else:
+                usuario = UserExtension.objects.get(usuario = request.user)
+            return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form, 'error_edit':error_edit})
 
 def change_password(request):
     if request.method == 'POST':
@@ -155,3 +180,20 @@ def change_password(request):
             return redirect('account')
         else:
             return redirect('account')
+
+def Register_Accreditation_Authority(request):
+    if request.method == 'POST':
+        payload = {
+            "owner": "0xeA88D2c82950a0D539438a53387a617327a8e1a3",
+            "name": "Boss Enterprises CA",
+            "id": 231398,
+            "password": "1234567890",
+            "email": "boss@example.com" }
+        url = "http://127.0.0.1:8080/api/register/accreditation-authority/"
+        headers = {}
+        response = requests.post(url, data=payload, headers=headers)
+        print(response.status_code)
+        if response.status_code == 200:
+            return HttpResponse("Registrada la Autoridad de Accreditación MPPES-OPSU")
+        else:
+            return redirect('initial_user')

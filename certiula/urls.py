@@ -54,6 +54,8 @@ urlpatterns = [
         {'template_name' : 'registration/password_reset_complete.html'}, name='password_reset_complete'),
     ## Logout
     path('logout/',login_required(LogoutView.as_view()), name='logout'),
+
+    path('session/register/accreditation-authority/',login_required(Register_Accreditation_Authority), name='register_accreditation_authority'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'
