@@ -1,8 +1,9 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django import forms
 from .models import UserExtension
-from django.contrib.auth.models import User
 
+## Formulario de Inicio de Sesion
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -11,6 +12,7 @@ class LoginForm(AuthenticationForm):
         self.fields['password'].widget.attrs['class']= 'form-control'
         self.fields['password'].widget.attrs['placeholder']= 'Contraseña'
 
+## Formularios de Registro
 class UserForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')
 
@@ -35,6 +37,7 @@ class UserExtensionForm(forms.ModelForm):
             'direccion':forms.TextInput(attrs={'placeholder': 'ej. Av. Las Americas, Residencias El Parque, ...'})
         }
 
+## Formularios de Edicion de Perfil
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User

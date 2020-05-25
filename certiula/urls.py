@@ -30,17 +30,14 @@ urlpatterns = [
     path('services/',TemplateView.as_view(template_name='home/services.html'), name = 'services'),
     path('instructives/',TemplateView.as_view(template_name='home/instructives.html'), name = 'instructives'),
     path('contact/',TemplateView.as_view(template_name='home/contact.html'), name = 'contact'),
-    ## Login
+    ## Inicio de Session
     path('login/',Login.as_view(), name='login'),
     path('session/',login_required(Initial_User.as_view()),name='initial_user'),
-    ## Profile
+    ## Perfil
     path('session/profile/',login_required(Profile.as_view()), name = 'profile'),
-    path('session/profile/edit',login_required(EditProfile), name = 'edit_profile'),
-    ## Account
+    ## Cuenta
     path('session/account/',login_required(Account.as_view()), name = 'account'),
-    ## Password Change
-    path('session/account/password/change',login_required(change_password), name = 'change_password'),
-    ## Registration
+    ## Registro
     path('signup/',Signup, name = 'signup'),
     path('activate/<uidb64>/<token>/',Activate, name='activate'),
     path('password/reset/',views.PasswordResetView.as_view(html_email_template_name='registration/password_reset_html_email.html'),
@@ -52,7 +49,7 @@ urlpatterns = [
         {'template_name' : 'registration/password_reset_confirm.html'}, name='password_reset_confirm'),
     path('password/reset/complete/', views.PasswordResetCompleteView.as_view(),
         {'template_name' : 'registration/password_reset_complete.html'}, name='password_reset_complete'),
-    ## Logout
+    ## Cierre de Sesion
     path('logout/',login_required(LogoutView.as_view()), name='logout'),
 
     path('session/register/accreditation-authority/',login_required(Register_Accreditation_Authority), name='register_accreditation_authority'),

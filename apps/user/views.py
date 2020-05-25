@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, View, UpdateView
 from django.views.generic.edit import FormView
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -30,7 +30,9 @@ w3 = Web3(HTTPProvider('http://localhost:8545'))
 ## Unique email for user
 User._meta.get_field('email')._unique = True
 
-## Views user
+## Vistas de Usuario
+
+## Activar Cuenta (Registro)
 def Activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -45,6 +47,7 @@ def Activate(request, uidb64, token):
     else:
         return render(request, 'registration/invalid_link.html',{})
 
+## Registro
 def Signup(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -79,6 +82,7 @@ def Signup(request):
         user_extension_form = UserExtensionForm
         return render(request, 'registration/signup.html',{'user_extension_form':user_extension_form,'user_form':user_form})
 
+## Inicio de Sesion
 class Login(FormView):
     template_name = 'home/index.html'
     form_class = LoginForm
@@ -101,6 +105,7 @@ class Login(FormView):
         kwargs['invalid_login'] = invalid_login
         return kwargs
 
+## Inicial de Usuario
 class Initial_User(ListView):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
@@ -124,7 +129,8 @@ class Initial_User(ListView):
             message = 'Es un Usuario'
             return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
 
-class Profile(ListView):
+## Perfil
+class Profile(View):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
         user_form = EditUserForm(instance=request.user)
@@ -135,7 +141,24 @@ class Profile(ListView):
             usuario = UserExtension.objects.get(usuario = self.request.user)
         return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form})
 
-class Account(ListView):
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(username=self.request.user)
+        user_form = EditUserForm(request.POST, instance=self.request.user)
+        user_extension_form = EditUserExtensionForm(request.POST, request.FILES, instance=self.request.user.userextension)
+        if user_form.is_valid() and user_extension_form.is_valid():
+            user_form.save()
+            user_extension_form.save()
+            return redirect('profile')
+        else:
+            if FunctionalUnit.objects.filter(usuario = user).exists():
+                usuario = None
+            else:
+                usuario = UserExtension.objects.get(usuario = self.request.user)
+            error_edit = True
+            return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form,'error_edit':error_edit})
+
+## Cuenta
+class Account(View):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
         form = PasswordChangeForm(request.user)
@@ -152,35 +175,30 @@ class Account(ListView):
             usuario_tipo = None
             return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
 
-def EditProfile(request):
-    if request.method == 'POST':
-        user_form = EditUserForm(request.POST, instance=request.user)
-        user_extension_form = EditUserExtensionForm(request.POST, request.FILES, instance=request.user.userextension)
-        if user_form.is_valid() and user_extension_form.is_valid():
-            user_form.save()
-            user_extension_form.save()
-            return redirect('profile')
-        else:
-            user = User.objects.get(username=request.user)
-            user_form = EditUserForm(instance=request.user)
-            user_extension_form = EditUserExtensionForm(instance=request.user.userextension)
-            error_edit = True
-            if FunctionalUnit.objects.filter(usuario = user).exists():
-                usuario = None
-            else:
-                usuario = UserExtension.objects.get(usuario = request.user)
-            return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form, 'error_edit':error_edit})
-
-def change_password(request):
-    if request.method == 'POST':
+    def post(self,request):
+        user = User.objects.get(username=self.request.user)
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
             return redirect('account')
         else:
-            return redirect('account')
+            if FunctionalUnit.objects.filter(usuario = user).exists():
+                usuario = None
+                usuario_tipo = FunctionalUnit.objects.get(usuario = self.request.user)
+                return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
+            if Authority.objects.filter(usuario__usuario = user).exists():
+                usuario = UserExtension.objects.get(usuario = self.request.user)
+                usuario_tipo = Authority.objects.get(usuario__usuario = self.request.user)
+                return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
+            if UserExtension.objects.filter(usuario = user).exists():
+                usuario = UserExtension.objects.get(usuario = self.request.user)
+                usuario_tipo = None
+            error_change_password = True
+            return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form, 'error_change_password':error_change_password})
 
+
+## Registro de Autordiad de Accreditación (MPPES-OPSU)
 def Register_Accreditation_Authority(request):
     if request.method == 'POST':
         payload = {
