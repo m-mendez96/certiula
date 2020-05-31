@@ -188,11 +188,9 @@ class Account(View):
             if FunctionalUnit.objects.filter(usuario = user).exists():
                 usuario = None
                 usuario_tipo = FunctionalUnit.objects.get(usuario = self.request.user)
-                return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
             if Authority.objects.filter(usuario__usuario = user).exists():
                 usuario = UserExtension.objects.get(usuario = self.request.user)
                 usuario_tipo = Authority.objects.get(usuario__usuario = self.request.user)
-                return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form})
             if UserExtension.objects.filter(usuario = user).exists():
                 usuario = UserExtension.objects.get(usuario = self.request.user)
                 usuario_tipo = None
