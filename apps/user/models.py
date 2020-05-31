@@ -15,6 +15,7 @@ class UserExtension(models.Model):
     telefono = models.CharField(max_length = 15)
     direccion = models.CharField(max_length = 150)
     foto_perfil =  models.ImageField ('Foto Perfil', upload_to = 'profile/', blank=True, null = True, default='profile/user.png')
+    registro_blockchain = models.BooleanField(blank = True, null = True, default = False)
     usuario = models.OneToOneField(User, on_delete =models.CASCADE, blank = False, null = False)
 
     class Meta:
