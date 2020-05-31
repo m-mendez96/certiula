@@ -53,20 +53,6 @@
   </script>
   <!-- //requried-jsfiles-for owl -->
 
-	<script>
-		window.addEventListener('load', function(){
-			if( typeof web3 !='undefined'){
-				console.log('web3 detected');
-				web3 = new Web3(web3.currentProvider);
-				console.log(web3.eth.accounts);
-				document.getElementById("address").value =  web3.eth.accounts;
-				var address = document.getElementById("address").value;
-			}else{
-				alert("Por favor instale MetaMask o en caso de tenerlo instaladO verifique la conexión del mismo con Certiula");
-			}
-		});
-	</script>
-
 	{% block extracss %} {% endblock extracss%}
 
 </head>
@@ -235,67 +221,8 @@
   <!-- main content start-->
   <div id="page-wrapper">
   	<div class="main-page general">
-      {% block content %}
 			<h2>{{message}}</h2>
-			<form action="{% url 'register_accreditation_authority' %}" method="post">
-				<div class="form-group">
-						<label class="col-md-2 control-label">Direccion:</label>
-						<div class="col-md-12">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-home"></i>
-								</span>
-								<input type="text" name="address" id="address">
-							</div>
-						</div>
-				</div>
-				<div class="form-group">
-						<label class="col-md-2 control-label">Nombre:</label>
-						<div class="col-md-12">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-home"></i>
-								</span>
-								<input type="text" name="name" id="name">
-							</div>
-						</div>
-				</div>
-				<div class="form-group">
-						<label class="col-md-2 control-label">Identificador:</label>
-						<div class="col-md-12">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-home"></i>
-								</span>
-								<input type="text" name="id" id="id">
-							</div>
-						</div>
-				</div>
-				<div class="form-group">
-						<label class="col-md-2 control-label">Contraseña:</label>
-						<div class="col-md-12">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-home"></i>
-								</span>
-								<input type="password" name="password" id="password">
-							</div>
-						</div>
-				</div>
-				<div class="form-group">
-						<label class="col-md-2 control-label">Email:</label>
-						<div class="col-md-12">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-home"></i>
-								</span>
-								<input type="email" name="email" id="email">
-							</div>
-						</div>
-				</div>
-        {% csrf_token %}
-        <input type="submit" value="Registrarme en la Blockchain" />
-      </form>
+			{% block content %}
 			{% endblock content %}
   	</div>
   </div>

@@ -51,8 +51,14 @@ urlpatterns = [
         {'template_name' : 'registration/password_reset_complete.html'}, name='password_reset_complete'),
     ## Cierre de Sesion
     path('logout/',login_required(LogoutView.as_view()), name='logout'),
-
+    ## CertsGen API
     path('session/register/accreditation-authority/',login_required(Register_Accreditation_Authority), name='register_accreditation_authority'),
+    path('session/auth/accreditation-authority/',login_required(Auth_Accreditation_Authority), name='auth_accreditation_authority'),
+    path('session/register/certification-authority/',login_required(Register_Certification_Authority), name='register_certification_authority'),
+    path('session/auth/certification-authority/',login_required(Auth_Certification_Authority), name='auth_certification_authority'),
+    path('session/register/certifier/',login_required(Register_Certifier), name='register_certifier'),
+    path('session/get/certifiers/',login_required(Get_Certifiers), name='get_certifiers'),
+    path('session/auth/certifier/',login_required(Auth_Certifier), name='auth_certifier'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

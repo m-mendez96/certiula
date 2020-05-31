@@ -109,7 +109,7 @@ class Login(FormView):
 class Initial_User(ListView):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
-        print(w3.eth.accounts[0])
+
         if user is not None and user.is_active:
             if user.is_superuser:
                 return redirect('admin:index')
@@ -117,10 +117,12 @@ class Initial_User(ListView):
                 message = 'Es una Autoridad'
                 usuario = UserExtension.objects.get(usuario = self.request.user)
                 autoridad = Authority.objects.get(usuario__usuario = user)
-                if autoridad.tipo is 'AA':
+                if autoridad.tipo == 'AA':
                     return render(request, 'user/accreditation_authority.html',{'usuario':usuario, 'user':user, 'message':message})
-                else:
-                    return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+                if autoridad.tipo == 'AC':
+                    return render(request, 'user/certification_authority.html',{'usuario':usuario, 'user':user, 'message':message})
+                if autoridad.tipo == 'C':
+                    return render(request, 'user/certifier.html',{'usuario':usuario, 'user':user, 'message':message})
             if FunctionalUnit.objects.filter(usuario = user).exists():
                 message = 'Es una Unidad Funcional'
                 usuario = None
@@ -197,8 +199,7 @@ class Account(View):
             error_change_password = True
             return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form, 'error_change_password':error_change_password})
 
-
-## Registro de Autordiad de Accreditación (MPPES-OPSU)
+## Registro de Autoridad de Accreditación (MPPES-OPSU)
 def Register_Accreditation_Authority(request):
     if request.method == 'POST':
         payload = {
@@ -210,8 +211,104 @@ def Register_Accreditation_Authority(request):
         url = "http://127.0.0.1:8080/api/register/accreditation-authority/"
         headers = {}
         response = requests.post(url, data=payload, headers=headers)
-        print(response.status_code)
         if response.status_code == 200:
             return HttpResponse("Registrada la Autoridad de Accreditación MPPES-OPSU")
+        else:
+            return redirect('initial_user')
+
+## Ingresar Autoridad de Accreditación (MPPES-OPSU)
+def Auth_Accreditation_Authority(request):
+    if request.method == 'POST':
+        payload = {
+            "username": "boss@example.com",
+	        "password": "1234567890"
+        }
+        url = "http://127.0.0.1:8080/api/auth/accreditation-authority/"
+        headers = {}
+        response = requests.post(url, data=payload, headers=headers)
+        if response.status_code == 200:
+            return HttpResponse("Logeado la Autoridad de Acreditacion")
+        else:
+            return redirect('initial_user')
+
+## Registro de Autordiad de Certificación (OCGRE-ULA)
+def Register_Certification_Authority(request):
+    if request.method == 'POST':
+        token = '93ebe5778ffd1a17a1935b04cadd1ac83ed3c3cd' ## Token AA
+        payload = {
+        	"owner": "0x2870Db5e8230A861fBDe67d73d946f11D3E441f0",
+        	"name": "Boss Enterprises CE",
+        	"id": 231398,
+        	"email": "boss_ce@example.com"
+        }
+        url = "http://127.0.0.1:8080/api/register/certification-authority/"
+        headers = { "Authorization": "Token {}".format(token)}
+        response = requests.post(url, data=payload, headers=headers)
+        if response.status_code == 200:
+            return HttpResponse("Registrada la Autoridad de Certificación OCGRE-ULA")
+        else:
+            return redirect('initial_user')
+
+## Ingresar Autordiad de Certificación (OCGRE-ULA)
+def Auth_Certification_Authority(request):
+    if request.method == 'POST':
+        token = '93ebe5778ffd1a17a1935b04cadd1ac83ed3c3cd' ## Token AA
+        payload = { "email": "boss_ce@example.com" }
+        url = "http://127.0.0.1:8080/api/auth/certification-authority/"
+        headers = { "Authorization": "Token {}".format(token)}
+        response = requests.post(url, data=payload, headers=headers)
+        print(response.json()['token']) ## Respuesta de Autentificación con el Token
+        if response.status_code == 200:
+            return HttpResponse("Logeado la Autoridad de Certificación OCGRE-ULA")
+        else:
+            return redirect('initial_user')
+
+## Registrar Certificador (Mario Bonucci, José Maria Anderez)
+def Register_Certifier(request):
+    if request.method == 'POST':
+        token = '21e87ca2c56a001e4d8fc85aa1120d1af7bc2e07' ## Token AC
+        payload = {
+        	"owner": "0x9303B427bC0f137605724dBeAf099908bD6B8f1d",
+        	"name": "Johny Link",
+        	"id": "Id Document",
+        	"id_number": 8987987,
+        	"email": "johny_link@example.com"
+        }
+        url = "http://127.0.0.1:8080/api/register/certifier/"
+        headers = { "Authorization": "Token {}".format(token)}
+        response = requests.post(url, data=payload, headers=headers)
+        if response.status_code == 200:
+            return HttpResponse("Registrado Certificador")
+        else:
+            return redirect('initial_user')
+
+## Obtener Certificadores (Mario Bonucci, José Maria Anderez)
+def Get_Certifiers(request):
+    token = '21e87ca2c56a001e4d8fc85aa1120d1af7bc2e07' ## Token AC
+    payload = {
+        "owner": "0x9303B427bC0f137605724dBeAf099908bD6B8f1d",
+        "name": "Johny Link",
+        "id": "Id Document",
+        "id_number": 8987987,
+        "email": "johny_link@example.com"
+    }
+    url = "http://127.0.0.1:8080/api/get/certifiers/"
+    headers = { "Authorization": "Token {}".format(token)}
+    response = requests.get(url, data=payload, headers=headers)
+    if response.status_code == 200:
+        return HttpResponse("Certificadores Registrados: " )
+    else:
+        return redirect('initial_user')
+
+## Ingresar Certificador
+def Auth_Certifier(request):
+    if request.method == 'POST':
+        token = '21e87ca2c56a001e4d8fc85aa1120d1af7bc2e07' ## Token AC
+        payload = { "email": "certifier_one@example.com" }
+        url = "http://127.0.0.1:8080/api/auth/certifier/"
+        headers = { "Authorization": "Token {}".format(token)}
+        response = requests.post(url, data=payload, headers=headers)
+        if response.status_code == 200:
+            return HttpResponse("Logeado Certificador")
         else:
             return redirect('initial_user')

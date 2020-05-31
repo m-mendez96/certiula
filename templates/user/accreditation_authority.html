@@ -3,50 +3,36 @@
 
 {% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | profile {% endblock title %}
 
-{% block walllet %}
+{% block extracss %}
 <script>
   window.addEventListener('load', function(){
     if( typeof web3 !='undefined'){
       console.log('web3 detected');
       web3 = new Web3(web3.currentProvider);
       console.log(web3.eth.accounts);
-      document.getElementById('address').innerHTML = web3.eth.accounts;
+      document.getElementById("address").value =  web3.eth.accounts;
+      var address = document.getElementById("address").value;
     }else{
       alert("Por favor instale MetaMask o en caso de tenerlo instaladO verifique la conexión del mismo con Certiula");
     }
   });
 </script>
-{% endblock walllet %}
+{% endblock extracss %}
 
 {% block content %}
-<h2 class="title1">Registro en la Blockchain como Autoridad de Acreditación</h2>
+<h2 class="title1">Autoridad de Acreditación</h2>
   <div class="col-md-12 chart-layer1-right">
     <div class="user-marorm">
       <div class="malorm-bottom">
             <div class="col-md-6 panel-grids">
-              {% if usuario.foto_perfil %}
-              <p><img src="../../{{usuario.foto_perfil.url}}" class="img-circle" width="280px" height="280px"></p>
-              {% else %}
-              <p><img src="{% static 'media/profile/user.png' %}" class="img-circle" width="280px" height="280px"></p>
-              {% endif %}
-              <div class="col-md-12">
-                <h2><p id="address"></p></h2>
-              </div>
-            </div>
-            <div class="col-md-6 panel-grids">
               <br><br>
-              <a class="agile-icon"><i class="fa fa-list-alt" aria-hidden="true"></i> {{usuario.identificacion}}</a><br>
-              <a class="agile-icon"><i class="fa fa-calendar" aria-hidden="true"></i> {{usuario.fecha_nacimiento}}</a><br>
-              <a class="agile-icon"><i class="fa fa-home" aria-hidden="true"></i> {{usuario.direccion}}</a><br>
-              <a class="agile-icon"><i class="fa fa-phone" aria-hidden="true"></i> {{usuario.telefono}}</a><br>
-              <a class="agile-icon"><i class="fa fa-user" aria-hidden="true"></i> {{user.username}}</a><br>
-              <a class="agile-icon"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{user.email}}</a><br><br>
-
               <div class="col-md-12">
                 <div class="wrap">
                   <div class="bg-effect">
                     <ul class="bt-list">
-                      <li><a href="#gridSystemModal" class="hvr-icon-rotate col-23" data-target="#gridSystemModal" data-toggle="modal">Editar</a></li>
+                      <li><a href="#gridSystemModal" class="hvr-icon-rotate col-23" data-target="#gridSystemModal" data-toggle="modal">Registro</a></li>
+                      <li><a href="#gridSystemModal1" class="hvr-icon-rotate col-23" data-target="#gridSystemModal1" data-toggle="modal">Login</a></li>
+                      <li><a href="#gridSystemModal2" class="hvr-icon-rotate col-23" data-target="#gridSystemModal2" data-toggle="modal">Registro OCGRE</a></li>
                     </ul>
                   </div>
                 </div>
@@ -55,80 +41,186 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-                        <center><h4 class="modal-title" id="gridSystemModalLabel">Editar Perfil</h4></center>
+                        <center><h4 class="modal-title" id="gridSystemModalLabel">Registrarme Blockchain</h4></center>
                       </div>
                       <div class="modal-body">
                           <div class="form-body">
-                            <form action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label"> </label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-home"></i>
-                                      </span>
-                                      <input type="text" class="form-control1" name="direccion" value="{{user_extension_form.direccion.value}}">
-                                    </div>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label"><br></label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
-                                      </span>
-                                      <input type="text" class="form-control1" name="telefono" value="{{user_extension_form.telefono.value}}">
-                                    </div>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label"><br></label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                      </span>
-                                      <input type="username" class="form-control1" name="username" value="{{user_form.username.value}}">
-                                    </div>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label"><br></label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-envelope-o"></i>
-                                      </span>
-                                      <input type="email" class="form-control1" name="email" value="{{user_form.email.value}}">
-                                    </div>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label"><br></label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-camera"></i>
-                                      </span>
-                                      {{user_extension_form.foto_perfil}}
-                                    </div>
-                                    <br>
-                                  </div>
-                              </div>
-                              <p><br></p>
-                              <center>
-                                {% csrf_token %}
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                              </center>
+                            <form action="{% url 'register_accreditation_authority' %}" method="post">
+                      				<div class="form-group">
+                      						<label class="col-md-2 control-label">Direccion:</label>
+                      						<div class="col-md-12">
+                      							<div class="input-group">
+                      								<span class="input-group-addon">
+                      									<i class="fa fa-home"></i>
+                      								</span>
+                      								<input type="text" name="address" id="address">
+                      							</div>
+                      						</div>
+                      				</div>
+                      				<div class="form-group">
+                      						<label class="col-md-2 control-label">Nombre:</label>
+                      						<div class="col-md-12">
+                      							<div class="input-group">
+                      								<span class="input-group-addon">
+                      									<i class="fa fa-home"></i>
+                      								</span>
+                      								<input type="text" name="name" id="name">
+                      							</div>
+                      						</div>
+                      				</div>
+                      				<div class="form-group">
+                      						<label class="col-md-2 control-label">Identificador:</label>
+                      						<div class="col-md-12">
+                      							<div class="input-group">
+                      								<span class="input-group-addon">
+                      									<i class="fa fa-home"></i>
+                      								</span>
+                      								<input type="text" name="id" id="id">
+                      							</div>
+                      						</div>
+                      				</div>
+                      				<div class="form-group">
+                      						<label class="col-md-2 control-label">Contraseña:</label>
+                      						<div class="col-md-12">
+                      							<div class="input-group">
+                      								<span class="input-group-addon">
+                      									<i class="fa fa-home"></i>
+                      								</span>
+                      								<input type="password" name="password" id="password">
+                      							</div>
+                      						</div>
+                      				</div>
+                      				<div class="form-group">
+                      						<label class="col-md-2 control-label">Email:</label>
+                      						<div class="col-md-12">
+                      							<div class="input-group">
+                      								<span class="input-group-addon">
+                      									<i class="fa fa-home"></i>
+                      								</span>
+                      								<input type="email" name="email" id="email">
+                      							</div>
+                      						</div>
+                      				</div>
+                              {% csrf_token %}
+                              <input type="submit" value="Registrarme en la Blockchain" />
                             </form>
                           </div>
                       </div>
                     </div>
                   </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-              </div>
+                <div class="modal fade" id="gridSystemModal1" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                        <center><h4 class="modal-title" id="gridSystemModalLabel">Login Blockchain</h4></center>
+                      </div>
+                      <div class="modal-body">
+                          <div class="form-body">
+                            <form action="{% url 'auth_accreditation_authority' %}" method="post">
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Usuario:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="email" name="username" id="username">
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Contraseña:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="password" name="password" id="password">
+                                    </div>
+                                  </div>
+                              </div>
+                              {% csrf_token %}
+                              <input type="submit" value="Registrarme en la Blockchain" />
+                            </form>
+                          </div>
+                      </div>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+                <div class="modal fade" id="gridSystemModal2" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+                        <center><h4 class="modal-title" id="gridSystemModalLabel">Registrar Blockchain OCGRE</h4></center>
+                      </div>
+                      <div class="modal-body">
+                          <div class="form-body">
+                            <form action="{% url 'register_certification_authority' %}" method="post">
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Direccion:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="text" name="address" id="address">
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Nombre:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="text" name="name" id="name">
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Identificador:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="text" name="id" id="id">
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Contraseña:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="password" name="password" id="password">
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="form-group">
+                                  <label class="col-md-2 control-label">Email:</label>
+                                  <div class="col-md-12">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                      </span>
+                                      <input type="email" name="email" id="email">
+                                    </div>
+                                  </div>
+                              </div>
+                              {% csrf_token %}
+                              <input type="submit" value="Registrarme en la Blockchain" />
+                            </form>
+                          </div>
+                      </div>
+                    </div>
+                  </div><!-- /.modal-content -->
 
             </div>
             <div class="clearfix"></div>
