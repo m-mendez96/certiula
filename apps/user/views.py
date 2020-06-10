@@ -23,6 +23,7 @@ from .models import *
 from .forms import *
 from .tokens import account_activation_token
 import requests
+import json
 
 ## Web3 Blockchain Localhost
 w3 = Web3(HTTPProvider('http://localhost:8545'))
@@ -109,7 +110,6 @@ class Login(FormView):
 class Initial_User(ListView):
     def get(self,request,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
-
         if user is not None and user.is_active:
             if user.is_superuser:
                 return redirect('admin:index')
@@ -118,7 +118,7 @@ class Initial_User(ListView):
                 usuario = UserExtension.objects.get(usuario = self.request.user)
                 autoridad = Authority.objects.get(usuario__usuario = user)
                 if autoridad.tipo == 'AA':
-                    return render(request, 'user/accreditation_authority.html',{'usuario':usuario, 'user':user, 'message':message})
+                    return redirect('accreditation_authority')
                 if autoridad.tipo == 'AC':
                     return render(request, 'user/certification_authority.html',{'usuario':usuario, 'user':user, 'message':message})
                 if autoridad.tipo == 'C':
@@ -197,29 +197,12 @@ class Account(View):
             error_change_password = True
             return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form, 'error_change_password':error_change_password})
 
-## Registro de Autoridad de Accreditación (MPPES-OPSU)
-def Register_Accreditation_Authority(request):
-    if request.method == 'POST':
-        payload = {
-            "owner": "0xeA88D2c82950a0D539438a53387a617327a8e1a3",
-            "name": "Boss Enterprises CA",
-            "id": 231398,
-            "password": "1234567890",
-            "email": "boss@example.com" }
-        url = "http://127.0.0.1:8080/api/register/accreditation-authority/"
-        headers = {}
-        response = requests.post(url, data=payload, headers=headers)
-        if response.status_code == 200:
-            return HttpResponse("Registrada la Autoridad de Accreditación MPPES-OPSU")
-        else:
-            return redirect('initial_user')
-
 ## Ingresar Autoridad de Accreditación (MPPES-OPSU)
 def Auth_Accreditation_Authority(request):
     if request.method == 'POST':
         payload = {
-            "username": "boss@example.com",
-	        "password": "1234567890"
+            "username": "%s"%request.POST['email'],
+	        "password": "%s"%request.POST['password']
         }
         url = "http://127.0.0.1:8080/api/auth/accreditation-authority/"
         headers = {}
@@ -310,3 +293,46 @@ def Auth_Certifier(request):
             return HttpResponse("Logeado Certificador")
         else:
             return redirect('initial_user')
+
+## Autoridad de Acreditacion
+class Accreditation_Authority(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        autoridad = Authority.objects.get(usuario__usuario = user)
+        if usuario.registro_blockchain == True:
+            return render(request, 'user/accreditation_authority.html',{'usuario':usuario, 'user':user})
+        else:
+            return redirect('register_accreditation_authority')
+
+## Registro de Autoridad de Accreditación (MPPES-OPSU)
+class Register_Accreditation_Authority(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        if usuario.registro_blockchain == False and Authority.objects.get(usuario__usuario = user).tipo == 'AA':
+            return render(request, 'user/register_accreditation_authority.html',{'usuario':usuario, 'user':user})
+        else:
+            return redirect('initial_user')
+
+    def post(self,request):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        payload = {
+            'owner': '%s'%request.POST['owner'],
+            'name': '%s'%request.POST['name'],
+            'id': request.POST['id'],
+            'password': '%s'%request.POST['password'],
+            'email': '%s'%request.POST['email']}
+        url = "http://127.0.0.1:8080/api/register/accreditation-authority/"
+        headers = {}
+        response = requests.post(url, data=payload, headers=headers)
+        if response.status_code == 200:
+            usuario = UserExtension.objects.get(usuario = self.request.user)
+            usuario.registro_blockchain = True
+            usuario.save()
+            return render(request, 'user/register_accreditation_authority_done.html',{'usuario':usuario, 'user':user})
+        else:
+            error_register = True
+            response = response.content
+            return render(request, 'user/register_accreditation_authority.html',{'usuario':usuario, 'user':user,'error_register':error_register, 'response':response})

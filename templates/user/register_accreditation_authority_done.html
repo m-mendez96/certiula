@@ -1,0 +1,48 @@
+{% extends './base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | profile {% endblock title %}
+
+{% block extracss %}
+<script>
+  window.addEventListener('load', function(){
+    if( typeof web3 !='undefined'){
+      console.log('web3 detected');
+      web3 = new Web3(web3.currentProvider);
+      console.log(web3.eth.accounts);
+      document.getElementById("address").value =  web3.eth.accounts;
+      var address = document.getElementById("address").value;
+    }else{
+      alert("Por favor instale MetaMask o en caso de tenerlo instaladO verifique la conexión del mismo con Certiula");
+    }
+  });
+</script>
+{% endblock extracss %}
+
+{% block menu %}
+{% endblock menu %}
+
+{% block image_profile %}
+  <img src="../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+{% endblock image_profile %}
+
+{% block content %}
+<h2 class="title1">Autoridad de Acreditación</h2>
+<div class=" form-grids row form-grids-right">
+  <div class="widget-shadow " data-example-id="basic-forms">
+    <div class="form-title">
+      <h4>Registro en la Red Blockchain:</h4>
+    </div>
+    <div class="form-body">
+        <center>
+          <h3 class="title1">Su registro se ha realizado de manera exitosa.<br>Ahora puede ingresar a la red.</h3>
+          <div class="btn btn-default">
+            <a href="{% url 'initial_user' %}">
+              <h4>Ingresar</h4>
+            </a>
+          </div>
+        </center>
+    </div>
+  </div>
+</div>
+{% endblock content %}

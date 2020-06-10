@@ -73,33 +73,6 @@
 					<h1><a class="navbar-brand" href="{% url 'initial_user' %}"><img src="{% static 'images/i.png' %}" alt=""/></span></a></h1>
     		</div>
 			{% block menu %}
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<ul class="sidebar-menu">
-						<li class="header"><center>Menú</center></li>
-						<li class="treeview">
-							<a href="#">
-								<i class="fa fa-laptop"></i>
-								<span>Solicitudes</span>
-              	<i class="fa fa-angle-left pull-right"></i>
-            	</a>
-        			<ul class="treeview-menu">
-              	<li><a href="#"><i class="fa fa-angle-right"></i> Nueva Solicitud *</a></li>
-                <li><a href="#"><i class="fa fa-angle-right"></i> Solicitudes Realizadas</a></li>
-              </ul>
-            </li>
-            <li class="treeview">
-							<a href="#">
-								<i class="fa fa-folder"></i>
-								<span>Documentos</span>
-              	<i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li><a href="#"><i class="fa fa-angle-right"></i> Mis Documentos</a></li>
-              </ul>
-          	</li>
-          </ul>
-        </div>
-        <!-- /.navbar-collapse -->
 			{% endblock menu %}
       </nav>
   	</aside>
@@ -188,7 +161,7 @@
 							<div class="profile_img">
 								{% if usuario.foto_perfil %}
 										<span class="prfil-img">
-											<img src="../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+											{% block image_profile %}<img src="../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">{% endblock image_profile %}
 										</span>
 								{% else %}
 									<span class="prfil-img"><img src="{% static 'media/profile/user.png' %}" class="img-circle" width="50" height="50"> </span>
@@ -221,7 +194,6 @@
   <!-- main content start-->
   <div id="page-wrapper">
   	<div class="main-page general">
-			<h2>{{message}}</h2>
 			{% block content %}
 			{% endblock content %}
   	</div>

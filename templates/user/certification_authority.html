@@ -10,7 +10,7 @@
       console.log('web3 detected');
       web3 = new Web3(web3.currentProvider);
       console.log(web3.eth.accounts);
-      document.getElementById("address").value =  web3.eth.accounts;
+      document.getElementById("address").value =  web3.eth.accounts[0];
       var address = document.getElementById("address").value;
     }else{
       alert("Por favor instale MetaMask o en caso de tenerlo instaladO verifique la conexión del mismo con Certiula");
