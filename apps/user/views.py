@@ -141,7 +141,11 @@ class Profile(View):
             usuario = None
         else:
             usuario = UserExtension.objects.get(usuario = self.request.user)
-        return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form})
+            if Authority.objects.filter(usuario__usuario = user).exists():
+                usuario_tipo = Authority.objects.get(usuario__usuario = self.request.user)
+            else:
+                usuario_tipo = None
+        return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'usuario_tipo':usuario_tipo,'user_form':user_form, 'user_extension_form':user_extension_form})
 
     def post(self, request, *args, **kwargs):
         user = User.objects.get(username=self.request.user)
@@ -156,8 +160,12 @@ class Profile(View):
                 usuario = None
             else:
                 usuario = UserExtension.objects.get(usuario = self.request.user)
+                if Authority.objects.filter(usuario__usuario = user).exists():
+                    usuario_tipo = Authority.objects.get(usuario__usuario = self.request.user)
+                else:
+                    usuario_tipo = None
             error_edit = True
-            return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'user_form':user_form, 'user_extension_form':user_extension_form,'error_edit':error_edit})
+            return render(request, 'user/profile.html',{'user':user, 'usuario':usuario,'usuario_tipo':usuario_tipo,'user_form':user_form, 'user_extension_form':user_extension_form,'error_edit':error_edit})
 
 ## Cuenta
 class Account(View):
@@ -196,39 +204,6 @@ class Account(View):
                 usuario_tipo = None
             error_change_password = True
             return render(request, 'user/account.html',{'user':user,'usuario':usuario,'usuario_tipo':usuario_tipo, 'form':form, 'error_change_password':error_change_password})
-
-## Ingresar Autoridad de Accreditación (MPPES-OPSU)
-def Auth_Accreditation_Authority(request):
-    if request.method == 'POST':
-        payload = {
-            "username": "%s"%request.POST['email'],
-	        "password": "%s"%request.POST['password']
-        }
-        url = "http://127.0.0.1:8080/api/auth/accreditation-authority/"
-        headers = {}
-        response = requests.post(url, data=payload, headers=headers)
-        if response.status_code == 200:
-            return HttpResponse("Logeado la Autoridad de Acreditacion")
-        else:
-            return redirect('initial_user')
-
-## Registro de Autordiad de Certificación (OCGRE-ULA)
-def Register_Certification_Authority(request):
-    if request.method == 'POST':
-        token = '93ebe5778ffd1a17a1935b04cadd1ac83ed3c3cd' ## Token AA
-        payload = {
-        	"owner": "0x2870Db5e8230A861fBDe67d73d946f11D3E441f0",
-        	"name": "Boss Enterprises CE",
-        	"id": 231398,
-        	"email": "boss_ce@example.com"
-        }
-        url = "http://127.0.0.1:8080/api/register/certification-authority/"
-        headers = { "Authorization": "Token {}".format(token)}
-        response = requests.post(url, data=payload, headers=headers)
-        if response.status_code == 200:
-            return HttpResponse("Registrada la Autoridad de Certificación OCGRE-ULA")
-        else:
-            return redirect('initial_user')
 
 ## Ingresar Autordiad de Certificación (OCGRE-ULA)
 def Auth_Certification_Authority(request):
@@ -336,3 +311,61 @@ class Register_Accreditation_Authority(View):
             error_register = True
             response = response.content
             return render(request, 'user/register_accreditation_authority.html',{'usuario':usuario, 'user':user,'error_register':error_register, 'response':response})
+
+## Registro de Autoridad de Certificación (OCGRE-ULA)
+class Register_Certification_Authority(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        autoridad = Authority.objects.get(tipo='AC')
+        user_autoridad = User.objects.get(username=autoridad.usuario)
+        usuario_autoridad = UserExtension.objects.get(usuario = user_autoridad)
+        if usuario.registro_blockchain == True and Authority.objects.get(usuario__usuario = user).tipo == 'AA' and usuario_autoridad.registro_blockchain == False:
+            return render(request, 'user/register_certification_authority.html',{'usuario':usuario, 'user':user})
+        else:
+            return redirect('initial_user')
+
+    def post(self,request):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        payloadAuth = {
+            "username": "%s"%request.POST['username'],
+	        "password": "%s"%request.POST['password']
+        }
+        url = "http://127.0.0.1:8080/api/auth/accreditation-authority/"
+        headers = {}
+        response = requests.post(url, data=payloadAuth, headers=headers)
+        if response.status_code == 200:
+            r = response.json()
+            token = '%s'%r['token'] ## Token AA
+        else:
+            token = ' '
+        payload = {
+        	'owner': '%s'%request.POST['owner'],
+        	'name': '%s'%request.POST['name'],
+        	'id': request.POST['id'],
+        	'email': '%s'%request.POST['email'],
+        }
+        url = "http://127.0.0.1:8080/api/register/certification-authority/"
+        headers = { "Authorization": "Token {}".format(token)}
+        response = requests.post(url, data=payload, headers=headers)
+        if response.status_code == 200:
+            user_registro = User.objects.get(email=request.POST['email'])
+            user_extension_registro = UserExtension.objects.get(usuario = user_registro)
+            user_extension_registro.registro_blockchain = True
+            user_extension_registro.save()
+            return render(request, 'user/register_certification_authority_done.html',{'usuario':usuario, 'user':user})
+        else:
+            error_register = True
+            response = response.content
+            return render(request, 'user/register_certification_authority.html',{'usuario':usuario, 'user':user,'error_register':error_register, 'response':response})
+
+## Información de Autoridad de Certificación (OCGRE-ULA)
+class Info_Certification_Authority(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        if usuario.registro_blockchain == True and Authority.objects.get(usuario__usuario = user).tipo == 'AA':
+            return render(request, 'user/info_certification_authority.html',{'usuario':usuario, 'user':user})
+        else:
+            return redirect('initial_user')

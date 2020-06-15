@@ -3,6 +3,51 @@
 
 {% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | profile {% endblock title %}
 
+{% block menu %}
+{% if usuario_tipo.tipo is not None %}
+	{% if usuario_tipo.tipo == 'AA' %}
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="sidebar-menu">
+			<li class="header"><center>Menú</center></li>
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-laptop"></i>
+					<span>OCGRE</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="{% url 'info_certification_authority' %}"><i class="fa fa-angle-right"></i> Consultar OCGRE</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	{% endif %}
+	{% if usuario_tipo.tipo == 'AC' %}
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="sidebar-menu">
+			<li class="header"><center>Menú</center></li>
+
+		</ul>
+	</div>
+	{% endif %}
+	{% if usuario_tipo.tipo == 'C' %}
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="sidebar-menu">
+			<li class="header"><center>Menú</center></li>
+
+		</ul>
+	</div>
+	{% endif %}
+{% else %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	<ul class="sidebar-menu">
+		<li class="header"><center>Menú</center></li>
+
+	</ul>
+</div>
+{% endif %}
+{% endblock menu %}
+
 {% block content %}
 		<h2 class="title1">Perfil</h2>
 			<div class="col-md-12 chart-layer1-right">

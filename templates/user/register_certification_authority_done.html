@@ -1,7 +1,7 @@
 {% extends './accreditation_authority.html' %}
 {% load static %}
 
-{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | register AA {% endblock title %}
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | register AC {% endblock title %}
 
 {% block extracss %}
 <script>
@@ -28,14 +28,14 @@
 <div class=" form-grids row form-grids-right">
   <div class="widget-shadow " data-example-id="basic-forms">
     <div class="form-title">
-      <h4>Registro en la Red Blockchain:</h4>
+      <h4>Registro de Autoridad de Certificación:</h4>
     </div>
     <div class="form-body">
         <center>
-          <h3 class="title1">Su registro se ha realizado de manera exitosa.<br>Ahora puede registrar la Autoridad de Certificación.</h3>
+          <h3 class="title1">Se ha realizado el registro del Organismo de Certificación de manera exitosa.</h3>
           <div class="btn btn-default">
-            <a href="{% url 'register_certification_authority' %}">
-              <h4>Registar OCGRE</h4>
+            <a href="{% url 'info_certification_authority' %}">
+              <h4>Ver registro</h4>
             </a>
           </div>
         </center>
