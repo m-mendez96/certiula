@@ -56,6 +56,8 @@ urlpatterns = [
     path('register/accreditation_authority/',login_required(Register_Accreditation_Authority.as_view()), name='register_accreditation_authority'),
     path('register/certification_authority/',login_required(Register_Certification_Authority.as_view()), name='register_certification_authority'),
     path('session/info/certification_authority', login_required(Info_Certification_Authority.as_view()), name='info_certification_authority'),
+    path('session/certification_authority/',login_required(Certification_Authority.as_view()), name='certification_authority'),
+    path('session/certifiers/',login_required(Certifiers.as_view()), name='certifiers'),
     ## CertsGen API
     path('session/auth/certification-authority/',login_required(Auth_Certification_Authority), name='auth_certification_authority'),
     path('session/register/certifier/',login_required(Register_Certifier), name='register_certifier'),

@@ -120,7 +120,7 @@ class Initial_User(ListView):
                 if autoridad.tipo == 'AA':
                     return redirect('accreditation_authority')
                 if autoridad.tipo == 'AC':
-                    return render(request, 'user/certification_authority.html',{'usuario':usuario, 'user':user, 'message':message})
+                    return redirect('certification_authority')
                 if autoridad.tipo == 'C':
                     return render(request, 'user/certifier.html',{'usuario':usuario, 'user':user, 'message':message})
             if FunctionalUnit.objects.filter(usuario = user).exists():
@@ -350,10 +350,26 @@ class Register_Certification_Authority(View):
         headers = { "Authorization": "Token {}".format(token)}
         response = requests.post(url, data=payload, headers=headers)
         if response.status_code == 200:
+            r = response.json()
+            tokenAC = '%s'%r['token'] ## Token AC
             user_registro = User.objects.get(email=request.POST['email'])
             user_extension_registro = UserExtension.objects.get(usuario = user_registro)
             user_extension_registro.registro_blockchain = True
             user_extension_registro.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Registro de Autoridad de Certificación'
+            message = render_to_string('user/email_register_certification_authority.html', {
+                'user': user_registro,
+                'tokenAA':token,
+                'tokenAC':tokenAC,
+            })
+            text_content = strip_tags(message)
+            to_email = user_form.cleaned_data.get('email')
+            email = EmailMultiAlternatives(
+                        mail_subject, message, to=[to_email]
+            )
+            email.attach_alternative(message, "text/html")
+            email.send()
             return render(request, 'user/register_certification_authority_done.html',{'usuario':usuario, 'user':user})
         else:
             error_register = True
@@ -369,3 +385,41 @@ class Info_Certification_Authority(View):
             return render(request, 'user/info_certification_authority.html',{'usuario':usuario, 'user':user})
         else:
             return redirect('initial_user')
+
+## Autoridad de Certificacion
+class Certification_Authority(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        autoridad = Authority.objects.get(usuario__usuario = user)
+        if usuario.registro_blockchain == True and autoridad.tipo == 'AC':
+            return render(request, 'user/certification_authority.html',{'usuario':usuario, 'user':user})
+        else:
+            return redirect('logout')
+
+## Consulta y Registro de Certificadores
+class Certifiers(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        autoridad = Authority.objects.get(usuario__usuario = user)
+        if usuario.registro_blockchain == True and autoridad.tipo == 'AC':
+            token = 'bb15ca631e9d561b0dcf7c1cdc29ca5890cd9648' ## Token AC
+            payload = {
+                "owner": "0x9303B427bC0f137605724dBeAf099908bD6B8f1d",
+                "name": "Johny Link",
+                "id": "Id Document",
+                "id_number": 8987987,
+                "email": "johny_link@example.com"
+            }
+            url = "http://127.0.0.1:8080/api/get/certifiers/"
+            headers = { "Authorization": "Token {}".format(token)}
+            response = requests.get(url, data=payload, headers=headers)
+            if response.status_code == 200:
+                print(response.json())
+            else:
+                #return redirect('initial_user')
+                print(response.json())
+            return render(request, 'user/certifiers.html',{'usuario':usuario, 'user':user})
+        else:
+            return redirect('logout')
