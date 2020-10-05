@@ -21,64 +21,11 @@
 
 {% block content %}
 <h2 class="title1">Certificador</h2>
-  <div class="col-md-12 chart-layer1-right">
-    <div class="user-marorm">
-      <div class="malorm-bottom">
-            <div class="col-md-6 panel-grids">
-              <br><br>
-              <div class="col-md-12">
-                <div class="wrap">
-                  <div class="bg-effect">
-                    <ul class="bt-list">
-                      <li><a href="#gridSystemModal" class="hvr-icon-rotate col-23" data-target="#gridSystemModal" data-toggle="modal">Login</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="modal fade" id="gridSystemModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-                        <center><h4 class="modal-title" id="gridSystemModalLabel">Login Blockchain</h4></center>
-                      </div>
-                      <div class="modal-body">
-                          <div class="form-body">
-                            <form action="{% url 'auth_certifier' %}" method="post">
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label">Usuario:</label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-home"></i>
-                                      </span>
-                                      <input type="email" name="username" id="username">
-                                    </div>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <label class="col-md-2 control-label">Contraseña:</label>
-                                  <div class="col-md-12">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <i class="fa fa-home"></i>
-                                      </span>
-                                      <input type="password" name="password" id="password">
-                                    </div>
-                                  </div>
-                              </div>
-                              {% csrf_token %}
-                              <input type="submit" value="Registrarme en la Blockchain" />
-                            </form>
-                          </div>
-                      </div>
-                    </div>
-                  </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
+<div class="col-md-12 chart-layer1-right">
+  <div class="user-marorm">
+    <div class="malorm-bottom">
 
-            </div>
-            <div class="clearfix"></div>
-          </div>
-      </div>
+    </div>
   </div>
-  <div class="clearfix"> </div>
+</div>
 {% endblock content %}

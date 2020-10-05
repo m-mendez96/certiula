@@ -73,6 +73,12 @@
 					<h1><a class="navbar-brand" href="{% url 'initial_user' %}"><img src="{% static 'images/i.png' %}" alt=""/></span></a></h1>
     		</div>
 			{% block menu %}
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="sidebar-menu">
+					<li class="header"><center>Menú</center></li>
+			
+				</ul>
+			</div>
 			{% endblock menu %}
       </nav>
   	</aside>
@@ -91,7 +97,7 @@
 				{% block notifications %}
 				<!--notifications of menu start -->
   				<li class="dropdown head-dpdn">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-bell"></i><span class="badge blue">4</span></a>
+						<i class="fa fa-bell"></i>
   				<ul class="dropdown-menu">
   					<li>
 							<div class="notification_header">

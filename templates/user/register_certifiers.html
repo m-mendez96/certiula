@@ -1,0 +1,183 @@
+{% extends './certification_authority.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | register Certifiers {% endblock title %}
+
+{% block extracss %}
+<script>
+  window.addEventListener('load', function(){
+    if( typeof web3 !='undefined'){
+      console.log('web3 detected');
+      web3 = new Web3(web3.currentProvider);
+      console.log(web3.eth.accounts);
+      document.getElementById("address").value =  web3.eth.accounts;
+      var address = document.getElementById("address").value;
+    }else{
+      alert("Por favor instale MetaMask o en caso de tenerlo instaladO verifique la conexión del mismo con Certiula");
+    }
+  });
+</script>
+{% endblock extracss %}
+
+{% block image_profile %}
+  <img src="../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+{% endblock image_profile %}
+
+{% block content %}
+
+<!-- modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" >
+   <div class="modal-dialog" role="document">
+    <div class="modal-content modal-info">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body modal-spa">
+        <div class="login-grids">
+          <div class="login">
+              <center>
+                <h3><p style="color:red;">¡Error al intentar registrar!</p></h3>
+                {{response}}
+              </center>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- //modal -->
+
+<h2 class="title1">Autoridad de Certificación</h2>
+<div class=" form-grids row form-grids-right">
+  <div class="widget-shadow " data-example-id="basic-forms">
+    <div class="form-title">
+      <h4>Registro de Certificadores:</h4>
+    </div>
+    <div class="form-body">
+      <form class="form-horizontal" action="{% url 'register_certifiers' %}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Token AC</label>
+          <div class="col-sm-8">
+            <input type="text" name="token" class="form-control" id="token" placeholder="9slgbknb...">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Token registrado en la red blockchain</p>
+          </div>
+        </div>
+        <div class="form-title">
+          <h4>Información del Rector:</h4>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Address Rector</label>
+          <div class="col-sm-8">
+            <input type="text" name="owner" class="form-control" id="owner" placeholder="ej. 0x...">
+          </div>
+          <div class="col-sm-2">
+						<p class="help-block">Dirección de la cuenta del Rector </p>
+					</div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
+          <div class="col-sm-8">
+            <input type="text" name="name" class="form-control" id="name" placeholder="ej. Mario Bonucci">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Nombre del Rector</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Documento de ID</label>
+          <div class="col-sm-8">
+            <input type="text" name="id_document" class="form-control" id="id_document" placeholder="ej. V-12345678">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Documento de Identificacion del Rector</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+          <div class="col-sm-8">
+            <input type="number" name="id" class="form-control" id="id" placeholder="ej. 234567">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">ID de Certificador como Rector</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Email del Rector</label>
+          <div class="col-sm-8">
+            <input type="email" name="email" class="form-control" id="email" placeholder="ej. immendez196@gmail.com">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Correo electrónico del Rector</p>
+          </div>
+        </div>
+        <div class="form-title">
+          <h4>Información del Secretario:</h4>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Address Secretario</label>
+          <div class="col-sm-8">
+            <input type="text" name="owner1" class="form-control" id="owner1" placeholder="ej. 0x...">
+          </div>
+          <div class="col-sm-2">
+						<p class="help-block">Dirección de la cuenta del Secretario </p>
+					</div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
+          <div class="col-sm-8">
+            <input type="text" name="name1" class="form-control" id="name1" placeholder="ej. Jose Maria Anderez">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Nombre del Secretario</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Documento de ID</label>
+          <div class="col-sm-8">
+            <input type="text" name="id_document1" class="form-control" id="id_document1" placeholder="ej. V-12345678">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Documento de Identificacion del Secretario</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+          <div class="col-sm-8">
+            <input type="number" name="id1" class="form-control" id="id1" placeholder="ej. 234567">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">ID de Certificador como Secretario</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">Email del Secretario</label>
+          <div class="col-sm-8">
+            <input type="email" name="email1" class="form-control" id="email1" placeholder="ej. immendez196@gmail.com">
+          </div>
+          <div class="col-sm-2">
+            <p class="help-block">Correo electrónico del Secretario</p>
+          </div>
+        </div>
+        <center>
+          {% csrf_token %}
+          <button type="submit" class="btn btn-default">Registrar</button>
+        </center>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extrajs %}
+  {% if error_register is True %}
+    <script type="text/javascript">
+        $(window).on('load',function(){
+            $('#myModal1').modal('show');
+        });
+    </script>
+  {% endif %}
+{% endblock extrajs %}

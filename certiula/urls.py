@@ -56,13 +56,12 @@ urlpatterns = [
     path('register/accreditation_authority/',login_required(Register_Accreditation_Authority.as_view()), name='register_accreditation_authority'),
     path('register/certification_authority/',login_required(Register_Certification_Authority.as_view()), name='register_certification_authority'),
     path('session/info/certification_authority', login_required(Info_Certification_Authority.as_view()), name='info_certification_authority'),
+    ## Autoridad de Certificación
     path('session/certification_authority/',login_required(Certification_Authority.as_view()), name='certification_authority'),
-    path('session/certifiers/',login_required(Certifiers.as_view()), name='certifiers'),
-    ## CertsGen API
-    path('session/auth/certification-authority/',login_required(Auth_Certification_Authority), name='auth_certification_authority'),
-    path('session/register/certifier/',login_required(Register_Certifier), name='register_certifier'),
-    path('session/get/certifiers/',login_required(Get_Certifiers), name='get_certifiers'),
-    path('session/auth/certifier/',login_required(Auth_Certifier), name='auth_certifier'),
+    path('session/register/certifiers/',login_required(Register_Certifiers.as_view()), name='register_certifiers'),
+    path('session/certifiers/get/',login_required(Info_Certifiers.as_view()), name='info_certifiers'),
+    ## Certificador(es)
+    path('session/certifier/',login_required(Certifier.as_view()), name='certifier'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

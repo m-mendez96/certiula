@@ -1,4 +1,4 @@
-{% extends './base.html' %}
+{% extends './certification_authority.html' %}
 {% load static %}
 
 {% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | certifiers {% endblock title %}
@@ -14,7 +14,7 @@
         <i class="fa fa-angle-left pull-right"></i>
       </a>
       <ul class="treeview-menu">
-        <li><a href="{% url 'certifiers' %}"><i class="fa fa-angle-right"></i> Consultar Certificadores</a></li>
+        <li><a href="{% url 'info_certifiers' %}"><i class="fa fa-angle-right"></i> Consultar Certificadores</a></li>
       </ul>
     </li>
   </ul>
@@ -22,12 +22,73 @@
 <!-- /.navbar-collapse -->
 {% endblock menu %}
 
+{% block image_profile %}
+  <img src="../../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+{% endblock image_profile %}
+
 {% block content %}
 <h2 class="title1">Certificadores</h2>
 	<div class="col-md-12 chart-layer1-right">
 		<div class="user-marorm">
 			<div class="malorm-bottom">
-
+        <div class="form-body">
+          <center><h2>Información del Rector</h2></center>
+          <form class="form-horizontal" action="#" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Owner</label>
+              <div class="col-sm-8">
+                <input type="text" name="owner" class="form-control" id="owner" placeholder="0x2870Db5e8230A861fBDe67d73d946f11D3E441f0" disabled="disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
+              <div class="col-sm-8">
+                <input type="text" name="name" class="form-control" id="name" placeholder="OCGRE-ULA" disabled="disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+              <div class="col-sm-8">
+                <input type="number" name="id" class="form-control" id="id" placeholder="231398" disabled="disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+              <div class="col-sm-8">
+                <input type="email" name="email" class="form-control" id="email" placeholder="natali@ula.ve" disabled="disabled">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="form-body">
+          <center><h2>Información del Secretario</h2></center>
+          <form class="form-horizontal" action="#" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Owner</label>
+              <div class="col-sm-8">
+                <input type="text" name="owner" class="form-control" id="owner" placeholder="0x2870Db5e8230A861fBDe67d73d946f11D3E441f0" disabled="disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
+              <div class="col-sm-8">
+                <input type="text" name="name" class="form-control" id="name" placeholder="OCGRE-ULA" disabled="disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">ID</label>
+              <div class="col-sm-8">
+                <input type="number" name="id" class="form-control" id="id" placeholder="231398" disabled="disabled">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+              <div class="col-sm-8">
+                <input type="email" name="email" class="form-control" id="email" placeholder="natali@ula.ve" disabled="disabled">
+              </div>
+            </div>
+          </form>
+        </div>
 			</div>
  		</div>
 	</div>
