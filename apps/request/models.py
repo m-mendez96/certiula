@@ -4,6 +4,7 @@ from apps.user.models import UserExtension
 
 # Modelo de Solicitud de Certificación de Documentos
 class Request(models.Model):
+    request_id = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(UserExtension, on_delete =models.CASCADE, blank=False)
     STATE = (
         ('R','Realizada'),
@@ -15,12 +16,12 @@ class Request(models.Model):
         ('P-RE','Procesada Rectorado'),
         ('C','Cancelada'),
     )
-    estado = models.CharField(max_length=4, choices=STATE)
+    estado = models.CharField(max_length=4, choices=STATE, default=STATE[0][0])
     TYPE = (
         ('L','Legalizados'),
         ('C','Certificados'),
     )
-    tipo = models.CharField(max_length=1, choices=TYPE)
+    tipo = models.CharField(max_length=1, choices=TYPE, blank=False)
     fecha = models.DateTimeField(default=datetime.now)
     FACULTADES_NUCLEOS = (
         ('FAD','Facultad de Arquitectura y Diseño'),
@@ -39,10 +40,10 @@ class Request(models.Model):
         ('NUVM','Núcleo Universitario Valle del Mocotíes - Tovar'),
         ('NUAA','Núcleo Universitario Alberto Adriani - El Vigia'),
     )
-    facultad_nucleo = models.CharField(max_length=4, choices=FACULTADES_NUCLEOS)
-    escuela = models.CharField(max_length = 50)
-    titulo_obtenido = models.CharField(max_length = 50)
-    fecha_grado = models.DateField()
+    facultad_nucleo = models.CharField(max_length=4, choices=FACULTADES_NUCLEOS, blank=False)
+    escuela = models.CharField(max_length = 50, blank=False)
+    titulo_obtenido = models.CharField(max_length = 50, blank=False)
+    fecha_grado = models.DateField(blank=False)
     # Documentos Solicitados
     titulo = models.BooleanField(default=False)
     notas = models.BooleanField(default=False)
@@ -53,4 +54,4 @@ class Request(models.Model):
         verbose_name_plural = 'Solicitudes'
 
     def __str__(self):
-        return '%s %s %s %s' % (self.usuario,self.estado,self.tipo,self.fecha)
+        return '%s %s %s %s %s' % (self.request_id,self.usuario,self.estado,self.tipo,self.fecha)

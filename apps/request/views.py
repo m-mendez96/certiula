@@ -1,3 +1,30 @@
-from django.shortcuts import render
+from django.views.generic import ListView, View, UpdateView
+from django.views.generic.edit import FormView
+from django.shortcuts import render, redirect
+from apps.user.models import *
+from .forms import *
+from .models import Request
 
-# Create your views here.
+## Crear Solicitud de Documentos
+class Create_Request(View):
+    def get(self,request,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        form = RequestForm
+        message = False
+        return render(request, 'request/create_request.html',{'usuario':usuario, 'user':user, 'form':form, 'message':message})
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        req = Request(usuario=usuario,tipo=request.POST['tipo'],facultad_nucleo=request.POST['facultad_nucleo'],escuela=request.POST['escuela'],titulo_obtenido=request.POST['titulo_obtenido'],fecha_grado=request.POST['fecha_grado'])
+        if 'titulo' in request.POST:
+            req.titulo = True
+        if 'notas' in request.POST:
+            req.notas = True
+        if 'acta' in request.POST:
+            req.acta = True
+        req.save()
+        form = RequestForm
+        message = True
+        return render(request, 'request/create_request.html',{'usuario':usuario, 'user':user, 'form':form, 'message':message})

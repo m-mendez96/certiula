@@ -29,11 +29,12 @@ class UserForm(UserCreationForm):
 class UserExtensionForm(forms.ModelForm):
     class Meta:
         model = UserExtension
-        fields = ['identificacion','fecha_nacimiento','telefono','direccion']
+        fields = ['identificacion','fecha_nacimiento','telefono','cuenta_blockchain','direccion']
         widgets = {
             'identificacion':forms.TextInput(attrs={'placeholder': 'ej. V-19348289'}),
             'fecha_nacimiento':forms.TextInput(attrs={'placeholder': 'ej. 21/05/1994'}),
             'telefono':forms.TextInput(attrs={'placeholder': 'ej. +58 412 1002038'}),
+            'cuenta_blockchain':forms.TextInput(attrs={'placeholder': 'ej. 0x...'}),
             'direccion':forms.TextInput(attrs={'placeholder': 'ej. Av. Las Americas, Residencias El Parque, ...'})
         }
 

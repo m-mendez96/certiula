@@ -1,0 +1,103 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | create request {% endblock title %}
+
+{% block content %}
+<!-- modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
+    <div class="modal-dialog" role="document">
+     <div class="modal-content modal-info">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+       </div>
+       <div class="modal-body modal-spa">
+         <div class="login-grids">
+           <div class="login">
+               <center>
+                 <h3><p style="color:green;">¡Tu solicitud a sido enviada!</p></h3>
+                 <p> Lo mantedremos informado cuando su solicitud sea procesada.</p>
+               </center>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+ <!-- //modal -->
+
+<h2 class="title1">Solicitud de Documentos</h2>
+<div class="col-md-12 chart-layer1-right">
+    <div class="user-marorm">
+        <div class="malorm-bottom">
+            <form action="{% url 'create_request' %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Solicitar">
+            </form>
+            <!--<form action="{% url 'create_request' %}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Tipo de Documentos Solicitados:</label>
+                    <div class="col-sm-8">
+                        {{request_form.tipo}} 
+                    </div>
+                </div>
+                <p><br></p>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Facultad o Núcleo:</label>
+                    <div class="col-sm-8">
+                        {{request_form.facultad_nucleo}} 
+                    </div>
+                </div>
+                <p><br></p>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Escuela:</label>
+                    <div class="col-sm-8">
+                        {{request_form.escuela}} 
+                    </div>
+                </div>
+                <p><br></p>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Titulo Obtenido:</label>
+                    <div class="col-sm-8">
+                        {{request_form.titulo_obtenido}} 
+                    </div>
+                </div>
+                <p><br></p>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Fecha de Grado:</label>
+                    <div class="col-sm-8">
+                        {{request_form.fecha_grado}} 
+                    </div>
+                </div>
+                <p><br></p>
+                <div class="form-group">
+                    <label for="checkbox" class="col-sm-2 control-label">Documentos Solicitados:</label><p> </p>
+						<div class="col-sm-8">
+                            <label for="checkbox" class="col-sm-2 control-label">Titulo</label>{{request_form.titulo}}
+                            <label for="checkbox" class="col-sm-2 control-label">Notas</label>{{request_form.notas}}
+                            <label for="checkbox" class="col-sm-2 control-label">Acta</label>{{request_form.acta}}  
+						</div>
+                </div>
+                <p><br></p>
+                <center>
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Solicitar</button>
+                </center>
+            </form>!-->
+        </div>
+    </div>
+</div>
+<div class="clearfix"> </div>
+{% endblock content %}
+
+{% block extrajs %}
+	{% if message is True %}
+		<script type="text/javascript">
+				$(window).on('load',function(){
+						$('#myModal').modal('show');
+				});
+		</script>
+	{% endif %}
+{% endblock extrajs %}

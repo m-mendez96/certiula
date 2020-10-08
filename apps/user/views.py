@@ -128,8 +128,7 @@ class Initial_User(ListView):
                 usuario = None
                 return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
             usuario = UserExtension.objects.get(usuario = self.request.user)
-            message = 'Es un Usuario'
-            return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+            return redirect('create_request')
 
 ## Perfil
 class Profile(View):

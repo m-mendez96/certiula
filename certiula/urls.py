@@ -21,6 +21,7 @@ from django.contrib.auth import views
 from django.contrib.auth.views import LogoutView
 from django.views.generic.base import TemplateView
 from apps.user.views import *
+from apps.request.views import *
 
 urlpatterns = [
     ## Home
@@ -62,6 +63,8 @@ urlpatterns = [
     path('session/certifiers/get/',login_required(Info_Certifiers.as_view()), name='info_certifiers'),
     ## Certificador(es)
     path('session/certifier/',login_required(Certifier.as_view()), name='certifier'),
+    ## Crear Solicitud
+    path('session/request/documents',login_required(Create_Request.as_view()), name='create_request'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'
