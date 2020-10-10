@@ -1,0 +1,72 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | get requests {% endblock title %}
+
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="sidebar-menu">
+        <li class="header"><center>Menú</center></li>
+        <li class="treeview">
+            <a href="#">
+              <i class="fa fa-laptop"></i>
+              <span>Solicitudes</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{% url 'get_requests' %}"><i class="fa fa-angle-right"></i> Solicitudes Realizadas</a></li>
+              <li><a href="{% url 'create_request' %}"><i class="fa fa-angle-right"></i> Realizar Solicitud</a></li>
+            </ul>
+          </li>
+    </ul>
+</div>
+{% endblock menu %}
+
+{% block content %}
+<div class="bs-example widget-shadow" data-example-id="hoverable-table"> 
+  <table class="table table-hover">
+    <thead>
+      <tr> 
+        <th>ID</th> <th>Fecha</th> <th>Tipo</th> <th>Estado</th> <th> </th> <th> </th>
+      </tr> 
+    </thead> 
+    <tbody>
+      {% for item in list_requests %}
+      <form id="purchase" action="" method="post" name="purchase"></form> 
+        <tr> 
+          <th scope="row">{{item.request_id}}</th> 
+          <td>
+            {{item.fecha}}
+          </td> 
+          <td>
+            {% if item.tipo == 'C' %}Certificados{% else %}Legalizados{% endif %}
+          </td> 
+          <td>
+            {% if item.estado == 'R' %}Realizada{% endif %}
+            {% if item.estado == 'P-UR' %}Procesada Unidad de Receptoria{% endif %}
+            {% if item.estado == 'P-UA' %}Procesada Unidad de Archivo{% endif %}
+            {% if item.estado == 'P-UP' %}Procesada Unidad de Procesamiento{% endif %}
+            {% if item.estado == 'P-CO' %}Procesada por Coordinación{% endif %}
+            {% if item.estado == 'P-SE' %}Procesada por Secretaria{% endif %}
+            {% if item.estado == 'P-RE' %}Procesada por Rectorado{% endif %}
+            {% if item.estado == 'T' %}Concluida{% endif %}
+            {% if item.estado == 'C' %}Cancelada{% endif %}
+          </td>
+          <td>
+            <form id="purchase" action="{% url 'get_request' item.request_id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Ver</button>
+            </form>
+          </td>
+          <td>
+            <form id="purchase" action="{% url 'delete_request' item.request_id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}  
+    </tbody> 
+  </table>
+</div>
+{% endblock content %}

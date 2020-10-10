@@ -65,6 +65,12 @@ urlpatterns = [
     path('session/certifier/',login_required(Certifier.as_view()), name='certifier'),
     ## Crear Solicitud
     path('session/request/documents',login_required(Create_Request.as_view()), name='create_request'),
+    ## Obtener Solicitudes
+    path('session/requests/get',login_required(Get_Requests.as_view()), name='get_requests'),
+    ## Obtener Solicitud
+    path('session/request/<int:pk>/get',login_required(Get_Request.as_view()), name='get_request'),
+    ## Eliminar Solicitud
+    path('session/request/<int:pk>/delete',login_required(Delete_Request.as_view()), name='delete_request'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

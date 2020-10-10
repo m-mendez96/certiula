@@ -3,6 +3,25 @@
 
 {% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | create request {% endblock title %}
 
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="sidebar-menu">
+        <li class="header"><center>Menú</center></li>
+        <li class="treeview">
+            <a href="#">
+              <i class="fa fa-laptop"></i>
+              <span>Solicitudes</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="{% url 'get_requests' %}"><i class="fa fa-angle-right"></i> Solicitudes Realizadas</a></li>
+              <li><a href="{% url 'create_request' %}"><i class="fa fa-angle-right"></i> Realizar Solicitud</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+{% endblock menu %}
+
 {% block content %}
 <!-- modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
@@ -32,60 +51,104 @@
         <div class="malorm-bottom">
             <form action="{% url 'create_request' %}" method="post">
                 {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Solicitar">
-            </form>
-            <!--<form action="{% url 'create_request' %}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Tipo de Documentos Solicitados:</label>
+                    <label class="col-sm-3 control-label">Tipo de Documentos: </label>
                     <div class="col-sm-8">
-                        {{request_form.tipo}} 
+                           {{form.tipo}}
                     </div>
                 </div>
-                <p><br></p>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Facultad o Núcleo:</label>
+                    <label class="col-sm-3 control-label"><br></label>
                     <div class="col-sm-8">
-                        {{request_form.facultad_nucleo}} 
+                           <p><br></p>
                     </div>
                 </div>
-                <p><br></p>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Escuela:</label>
+                    <label class="col-sm-3 control-label">Facultad o Núcleo: </label>
                     <div class="col-sm-8">
-                        {{request_form.escuela}} 
+                           {{form.facultad_nucleo}}
                     </div>
                 </div>
-                <p><br></p>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Titulo Obtenido:</label>
+                    <label class="col-sm-3 control-label"><br></label>
                     <div class="col-sm-8">
-                        {{request_form.titulo_obtenido}} 
+                           <p><br></p>
                     </div>
                 </div>
-                <p><br></p>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">Fecha de Grado:</label>
+                    <label class="col-sm-3 control-label">Escuela: </label>
                     <div class="col-sm-8">
-                        {{request_form.fecha_grado}} 
+                           {{form.escuela}}
                     </div>
                 </div>
-                <p><br></p>
                 <div class="form-group">
-                    <label for="checkbox" class="col-sm-2 control-label">Documentos Solicitados:</label><p> </p>
-						<div class="col-sm-8">
-                            <label for="checkbox" class="col-sm-2 control-label">Titulo</label>{{request_form.titulo}}
-                            <label for="checkbox" class="col-sm-2 control-label">Notas</label>{{request_form.notas}}
-                            <label for="checkbox" class="col-sm-2 control-label">Acta</label>{{request_form.acta}}  
-						</div>
+                    <label class="col-sm-3 control-label"><br></label>
+                    <div class="col-sm-8">
+                           <p><br></p>
+                    </div>
                 </div>
-                <p><br></p>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Titulo Obtenido: </label>
+                    <div class="col-sm-8">
+                           {{form.titulo_obtenido}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><br></label>
+                    <div class="col-sm-8">
+                           <p><br></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Fecha de Grado: </label>
+                    <div class="col-sm-8">
+                           {{form.fecha_grado}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><br></label>
+                    <div class="col-sm-8">
+                           <p><br></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Documentos a Solicitar: </label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label class="col-ms-1 control-label">Titulo</label>
+                            <div class="col-ms-8">
+                                   {{form.titulo}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label class="col-ms-1 control-label">Notas</label>
+                            <div class="col-ms-8">
+                                   {{form.notas}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label class="col-ms-1 control-label">Acta de Grado</label>
+                            <div class="col-ms-8">
+                                   {{form.acta}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <center>
-                    {% csrf_token %}
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Solicitar</button>
                 </center>
-            </form>!-->
+            </form>
         </div>
     </div>
 </div>

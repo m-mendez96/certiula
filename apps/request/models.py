@@ -14,6 +14,7 @@ class Request(models.Model):
         ('P-CO','Procesada Coordinación'),
         ('P-SE','Procesada Secretaria'),
         ('P-RE','Procesada Rectorado'),
+        ('T','Concluida'),
         ('C','Cancelada'),
     )
     estado = models.CharField(max_length=4, choices=STATE, default=STATE[0][0])
