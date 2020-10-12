@@ -1,0 +1,52 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | get requests {% endblock title %}
+
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="sidebar-menu">
+        <li class="header"><center>Menú</center></li>
+        
+    </ul>
+</div>
+{% endblock menu %}
+
+{% block content %}
+<h2 class="title1">Unidad de Receptoria</h2>
+<div class="bs-example widget-shadow" data-example-id="hoverable-table"> 
+  <table class="table table-hover">
+    <thead>
+      <tr> 
+        <th>ID</th> <th>Nombre</th> <th>Apellidos</th> <th>Identificación</th> <th>Fecha de Solicitud</th> <th> </th>
+      </tr> 
+    </thead> 
+    <tbody>
+      {% for item in list_requests %}
+      <form id="purchase" action="" method="post" name="purchase"></form> 
+        <tr> 
+          <th scope="row">{{item.request_id}}</th> 
+          <td>
+            {{item.usuario.usuario.first_name}}
+          </td> 
+          <td>
+            {{item.usuario.usuario.last_name}}
+          </td> 
+          <td>
+            {{item.usuario.identificacion}}
+          </td>
+          <td>
+            {{item.fecha}}
+          </td>
+          <td>
+            <form id="purchase" action="{% url 'get_request_funtional_units' item.request_id %}" method="get">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Ver</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}  
+    </tbody> 
+  </table>
+</div>
+{% endblock content %}

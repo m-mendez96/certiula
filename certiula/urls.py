@@ -71,6 +71,14 @@ urlpatterns = [
     path('session/request/<int:pk>/get',login_required(Get_Request.as_view()), name='get_request'),
     ## Eliminar Solicitud
     path('session/request/<int:pk>/delete',login_required(Delete_Request.as_view()), name='delete_request'),
+    ## Obtener Solcitudes Unidades Funcionales
+    path('session/funtional_unit/',login_required(Get_Requests_Functional_Units.as_view()), name='funtional_units'),
+    ## Obtener Solcitud Unidades Funcionales
+    path('session/funtional_unit/<int:pk>/request/',login_required(Get_Request_Funtional_Units.as_view()), name='get_request_funtional_units'),
+    ## Procesar Solcitud Unidades Funcionales
+    path('session/funtional_unit/<int:pk>/request/update',login_required(Update_Request_State.as_view()), name='update_request_state'),
+    ## Cancelar Solcitud Unidades Funcionales
+    path('session/funtional_unit/<int:pk>/request/cancel',login_required(Update_Request_Cancel.as_view()), name='update_request_cancel'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

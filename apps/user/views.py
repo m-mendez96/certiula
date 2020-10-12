@@ -126,7 +126,7 @@ class Initial_User(ListView):
             if FunctionalUnit.objects.filter(usuario = user).exists():
                 message = 'Es una Unidad Funcional'
                 usuario = None
-                return render(request, 'user/base.html',{'usuario':usuario, 'user':user, 'message':message})
+                return redirect('funtional_units')
             usuario = UserExtension.objects.get(usuario = self.request.user)
             return redirect('create_request')
 

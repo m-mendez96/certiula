@@ -37,18 +37,68 @@ class Get_Requests(View):
         list_requests = Request.objects.filter(usuario=usuario)
         return render(request, 'request/get_requests.html',{'usuario':usuario, 'user':user,'list_requests':list_requests})
 
-## Ver Solicitud
+## Ver Solicitud Beneficiario
 class Get_Request(View):
-    def post(self,request,pk=None,*args,**kwargs):
+    def get(self,request,pk=None,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
         usuario = UserExtension.objects.get(usuario = self.request.user)
         req = Request.objects.get(request_id=pk)
         return render(request, 'request/get_request.html',{'usuario':usuario, 'user':user,'req':req})
 
-## Eliminar Solicitud
+## Eliminar Solicitud Beneficiario
 class Delete_Request(View):
     def post(self,request,pk=None,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
         usuario = UserExtension.objects.get(usuario = self.request.user)
         Request.objects.filter(request_id=pk).delete()
         return redirect('get_requests')
+
+## Obtener Solicitudes Unidadades Funcionales
+class Get_Requests_Functional_Units(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = None
+        unidad = FunctionalUnit.objects.get(usuario=user)
+        if unidad.unidad_id == 'UR':
+            list_requests= Request.objects.filter(estado='R')
+            return render(request, 'request/receiving_unit.html',{'user':user,'usuario':usuario,'list_requests':list_requests})
+        if unidad.unidad_id == 'UA':
+            list_requests= Request.objects.filter(estado='P-UR')
+            return render(request, 'request/archive_unit.html',{'user':user,'usuario':usuario,'list_requests':list_requests})
+        if unidad.unidad_id == 'UP':
+            list_requests= Request.objects.filter(estado='P-UA')
+            return render(request, 'request/processing_unit.html',{'user':user,'usuario':usuario,'list_requests':list_requests})
+
+## Ver Solicitud Unidad Funcional
+class Get_Request_Funtional_Units(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = None
+        req = Request.objects.get(request_id=pk)
+        unidad = FunctionalUnit.objects.get(usuario=user)
+        return render(request, 'request/get_request_funtional_units.html',{'usuario':usuario, 'user':user,'req':req,'unidad':unidad})
+
+## Procesar Solicitud Unidades Funcionales
+class Update_Request_State(View):
+    def post(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        unidad = FunctionalUnit.objects.get(usuario=user).unidad_id
+        usuario = None
+        req = Request.objects.get(request_id=pk)
+        if unidad == 'UR':
+            req.estado = 'P-UR'
+        if unidad == 'UA':
+            req.estado = 'P-UA'
+        if unidad == 'UP':
+            req.estado = 'P-UP'
+        req.save()
+        return redirect('initial_user')
+
+## Cancelar Solicitud Unidades Funcionales
+class Update_Request_Cancel(View):
+    def post(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        req = Request.objects.get(request_id=pk)
+        req.estado = 'C'
+        req.save()
+        return redirect('initial_user')
