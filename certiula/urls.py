@@ -22,6 +22,7 @@ from django.contrib.auth.views import LogoutView
 from django.views.generic.base import TemplateView
 from apps.user.views import *
 from apps.request.views import *
+from apps.document.views import *
 
 urlpatterns = [
     ## Home
@@ -79,6 +80,8 @@ urlpatterns = [
     path('session/funtional_unit/<int:pk>/request/update',login_required(Update_Request_State.as_view()), name='update_request_state'),
     ## Cancelar Solcitud Unidades Funcionales
     path('session/funtional_unit/<int:pk>/request/cancel',login_required(Update_Request_Cancel.as_view()), name='update_request_cancel'),
+    ## Crear Documentos de Solicitud
+    path('session/funtional_unit/create/documents/<int:request_id>',login_required(Create_Documents.as_view()), name='create_documents'),
 ]
 
 admin.site.site_header = 'Administración de Certiula'

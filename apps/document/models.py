@@ -6,8 +6,8 @@ from apps.request.models import Request
 # Modelo de Documento
 class Document(models.Model):
     id = models.AutoField(primary_key=True)
-    titulo = models.CharField(max_length = 25, blank=False)
-    descripcion = models.CharField(max_length = 50, blank=True)
+    titulo = models.CharField(max_length = 40, blank=False)
+    descripcion = models.CharField(max_length = 70, blank=True)
     CATEGORIA = (
         ('T','Titulo'),
         ('N','Notas'),
@@ -20,6 +20,7 @@ class Document(models.Model):
     )
     tipo_documento = models.CharField(max_length=1, choices=TYPE, blank=False)
     fecha = models.DateTimeField(default=datetime.now)
+    archivo = models.FileField(upload_to ='documentos/',blank=False,null = False, default='documentos/default.pdf')
     beneficiario = models.ForeignKey(UserExtension, on_delete =models.CASCADE, blank=False)
     request = models.ForeignKey(Request, on_delete =models.CASCADE, blank=False)
     

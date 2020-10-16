@@ -18,7 +18,7 @@
 
 {% block content %}
 <h2 class="title1">Solicitud #{{req.request_id}}</h2>
-<div class="col-md-12 panel-grids">
+
   <div class="panel panel-primary"> 
     <div class="panel-heading"> 
       <h3 class="panel-title">Información de Solicitud</h3> 
@@ -151,7 +151,7 @@
       </div>
     </div>
   </div>
-  <div class=" form-grids row form-grids-right">
+
     <div class="widget-shadow " data-example-id="basic-forms">
       <div class="form-body">
         <center>
@@ -159,6 +159,7 @@
             {% csrf_token %}
               <button type="submit" class="btn btn-primary">Cancelar</button>
             </form>
+            <br>
           <form action="{% url 'update_request_state' req.request_id %}" method="post">
           {% csrf_token %}
             <button type="submit" class="btn btn-primary">Procesar</button>
@@ -166,7 +167,5 @@
         </center>
       </div>
     </div>
-  </div>
 
-</div>
 {% endblock content %}

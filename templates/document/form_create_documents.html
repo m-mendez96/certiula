@@ -1,0 +1,72 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | create documents {% endblock title %}
+
+{% block image_profile %}
+  <img src="../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+{% endblock image_profile %}
+
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="sidebar-menu">
+        <li class="header"><center>Menú</center></li>
+
+    </ul>
+</div>
+{% endblock menu %}
+
+{% block content %}
+<h2 class="title1">Registro de Documentos de la Solicitud:</h2>
+<div class="form-grids row widget-shadow" data-example-id="basic-forms">
+  <form action="{% url 'create_documents' req.request_id %}" method="post" enctype="multipart/form-data">
+    {% if titulo == True %} 
+    <div class="form-title">
+      <h4>Titulo:</h4>
+    </div>
+    <div class="form-body">
+      <div class="form-group">
+        <label for="exampleInputFile">Archivo:</label> 
+        <input type="file" id="titulo" name="titulo"> <p class="help-block">Archivo en formato .pdf</p> 
+      </div> 
+      <div class="form-group"> 
+        <label for="exampleInput">Descripción del Archivo:</label> 
+        <input type="text" class="form-control" id="descripcion_titulo" name="descripcion_titulo" placeholder="Ej. Titulo de Ingeniero de Sistemas">
+      </div>
+    </div>
+    {% endif %}
+    {% if notas == True %} 
+    <div class="form-title">
+      <h4>Notas:</h4>
+    </div>
+    <div class="form-body">
+      <div class="form-group">
+        <label for="exampleInputFile">Archivo:</label> 
+        <input type="file" id="notas" name="notas"> <p class="help-block">Archivo en formato .pdf</p> 
+      </div> 
+      <div class="form-group"> 
+        <label for="exampleInput">Descripción del Archivo:</label> 
+        <input type="text" class="form-control" id="descripcion_notas" name="descripcion_notas" placeholder="Ej. Notas de Ingeniería de Sistemas">
+      </div>
+    </div>
+    {% endif %}
+    {% if acta == True %} 
+    <div class="form-title">
+      <h4>Acta de Grado:</h4>
+    </div>
+    <div class="form-body">
+      <div class="form-group">
+        <label for="exampleInputFile">Archivo:</label> 
+        <input type="file" id="acta" name='acta'> <p class="help-block">Archivo en formato .pdf</p> 
+      </div> 
+      <div class="form-group"> 
+        <label for="exampleInput">Descripción del Archivo:</label> 
+        <input type="text" class="form-control" id="descripcion_acta" name="descripcion_acta" placeholder="Ej. Acta de Grado de Ingeniería de Sistemas">
+      </div>
+    </div>
+    {% endif %}
+    {% csrf_token %}
+    <center><button type="submit" class="btn btn-default">Guardar</button></center><br>
+  </form>
+</div>
+{% endblock content %}

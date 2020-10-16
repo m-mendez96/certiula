@@ -2,6 +2,7 @@ from django.views.generic import ListView, View, UpdateView
 from django.views.generic.edit import FormView
 from django.shortcuts import render, redirect
 from apps.user.models import *
+from apps.document.forms import *
 from .forms import *
 from .models import Request
 
@@ -87,12 +88,18 @@ class Update_Request_State(View):
         req = Request.objects.get(request_id=pk)
         if unidad == 'UR':
             req.estado = 'P-UR'
+            req.save()
+            return redirect('initial_user')
         if unidad == 'UA':
             req.estado = 'P-UA'
+            req.save()
+            return redirect('initial_user')
         if unidad == 'UP':
-            req.estado = 'P-UP'
-        req.save()
-        return redirect('initial_user')
+            titulo = req.titulo
+            notas = req.notas
+            acta = req.acta
+            form = DocumentForm
+            return render(request, 'document/form_create_documents.html',{'usuario':usuario, 'user':user,'req':req,'unidad':unidad,'titulo':titulo,'notas':notas,'acta':acta,'form':form})
 
 ## Cancelar Solicitud Unidades Funcionales
 class Update_Request_Cancel(View):
