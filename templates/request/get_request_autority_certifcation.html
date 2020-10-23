@@ -1,0 +1,230 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | get request {% endblock title %}
+
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  <ul class="sidebar-menu">
+    <li class="header"><center>Menú</center></li>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-laptop"></i>
+        <span>Certificadores</span>
+        <i class="fa fa-angle-left pull-right"></i>
+      </a>
+      <ul class="treeview-menu">
+        <li><a href="{% url 'register_certifiers' %}"><i class="fa fa-angle-right"></i> Registrar Certificadores</a></li>      
+        <li><a href="{% url 'info_certifiers' %}"><i class="fa fa-angle-right"></i> Consultar Certificadores</a></li>
+      </ul>
+    </li>
+    <li class="treeview">
+      <a href="#">
+        <i class="fa fa-folder"></i>
+        <span>Solicitudes</span>
+        <i class="fa fa-angle-left pull-right"></i>
+      </a>
+      <ul class="treeview-menu">
+        <li><a href="{% url 'get_requests_autority_certification' %}"><i class="fa fa-angle-right"></i> Solicitudes de Certificación</a></li>      
+      </ul>
+    </li>
+  </ul>
+</div>
+<!-- /.navbar-collapse -->
+{% endblock menu %}
+
+{% block image_profile %}
+  <img src=".././../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">
+{% endblock image_profile %}
+
+{% block content %}
+<h2 class="title1">Solicitud #{{req.request_id}}</h2>
+
+  <div class="panel panel-primary"> 
+    <div class="panel-heading"> 
+      <h3 class="panel-title">Información de Solicitud</h3> 
+    </div> 
+    <div class="panel-body">
+      <div class="col-md-6 panel-grids">
+        <div class="panel panel-default">
+          <div class="panel-heading"> 
+            <h3 class="panel-title">Datos de Solicitud:</h3>
+          </div>
+          <div class="panel-body">
+            <table class="egt">
+              <tr>
+                <td>ID: {{req.request_id}}</td>
+              </tr>
+              <tr>
+                <td>Tipo: {% if req.tipo == 'C' %}Certificados{% else %}Legalizados{% endif %}</td>
+              </tr>
+              <tr>
+                <td>Estado:
+                  {% if req.estado == 'R' %}Realizada{% endif %}
+                  {% if req.estado == 'P-UR' %}Procesada por Unidad de Receptoria{% endif %}
+                  {% if req.estado == 'P-UA' %}Procesada por Unidad de Archivo{% endif %}
+                  {% if req.estado == 'P-UP' %}Procesada por Unidad de Procesamiento{% endif %}
+                  {% if req.estado == 'P-CO' %}Procesada por Coordinación{% endif %}
+                  {% if req.estado == 'P-SE' %}Procesada por Secretaria{% endif %}
+                  {% if req.estado == 'P-RE' %}Procesada por Rectorado{% endif %}
+                  {% if req.estado == 'T' %}Concluida{% endif %}</td>
+              </tr>
+              <tr>
+                <td>Fecha de Solicitud: {{req.fecha}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>  
+      </div>
+      <div class="col-md-6 panel-grids">
+        <div class="panel panel-default"> 
+          <div class="panel-heading"> 
+            <h3 class="panel-title">Datos Academicos:</h3>
+          </div>
+          <div class="panel-body">
+            <table class="egt">
+              <tr>
+                <td>Facultad/Núcleo: 
+                  {% if req.facultad_nucleo == 'FAD' %}Facultad de Arquitectura y Diseño{% endif %}
+                  {% if req.facultad_nucleo == 'FA' %}Facultad de Arte{% endif %}
+                  {% if req.facultad_nucleo == 'FC' %}Facultad de Ciencias{% endif %}
+                  {% if req.facultad_nucleo == 'FCES' %}Facultad de Ciencias Económicas y Sociales{% endif %}
+                  {% if req.facultad_nucleo == 'FCFA' %}Facultad de Ciencias Forestales y Ambientales{% endif %}
+                  {% if req.facultad_nucleo == 'FCJP' %}Facultad de Ciencias Jurídicas y Políticas{% endif %}
+                  {% if req.facultad_nucleo == 'FFB' %}Facultad de Farmacia y Bioanálisis{% endif %}
+                  {% if req.facultad_nucleo == 'FH' %}Facultad de Humanidades y Educación{% endif %}
+                  {% if req.facultad_nucleo == 'FI' %}Facultad de Ingeniería{% endif %}
+                  {% if req.facultad_nucleo == 'FM' %}Facultad de Medicina{% endif %}
+                  {% if req.facultad_nucleo == 'FO' %}Facultad de Odontología{% endif %}
+                  {% if req.facultad_nucleo == 'NURR' %}Núcleo Universitario Rafael Rangel - Trujillo{% endif %}
+                  {% if req.facultad_nucleo == 'NUPR' %}Núcleo Universitario Pedro Rincon Gutierrez - Tachira{% endif %}
+                  {% if req.facultad_nucleo == 'NUVM' %}Núcleo Universitario Valle del Mocotíes - Tovar{% endif %}
+                  {% if req.facultad_nucleo == 'NUAA' %}Núcleo Universitario Alberto Adriani - El Vigia{% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td>Escuela: {{req.escuela}}</td>
+              </tr>
+              <tr>
+                <td>Titulo Obtenido: {{req.titulo_obtenido}}</td>
+              </tr>
+              <tr>
+                <td>Fecha de Grado: {{req.fecha_grado}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>  
+      </div>
+      <div class="col-md-6 panel-grids">
+        <div class="panel panel-default">
+          <div class="panel-heading"> 
+            <h3 class="panel-title">Datos de Personales:</h3>
+          </div>
+          <div class="panel-body">
+            <table class="egt">
+              <tr>
+                <td>Identificación: {{req.usuario.identificacion}}</td>
+              </tr>
+              <tr>
+                <td>Nombre: {{req.usuario.usuario.first_name}}</td>
+              </tr>
+              <tr>
+                <td>Apellidos: {{req.usuario.usuario.last_name}}</td>
+              </tr>
+              <tr>
+                <td>Fecha de Nacimiento: {{req.usuario.fecha_nacimiento}}</td>
+              </tr>
+              <tr>
+                <td>Telefono: {{req.usuario.telefono}}</td>
+              </tr>
+              <tr>
+                <td>Correo Electronico: {{req.usuario.usuario.email}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>  
+      </div>
+      <div class="col-md-6 panel-grids">
+        <div class="panel panel-default">
+          <div class="panel-heading"> 
+            <h3 class="panel-title">Documentos Solicitados:</h3>
+          </div> 
+          <div class="panel-body">
+            <table class="egt">
+              {% if req.titulo is True%}
+              <tr>
+                <td>Titulo</td>
+              </tr>
+              {% endif %}
+              {% if req.notas is True%}
+              <tr>
+                <td>Notas</td>
+              </tr>
+              {% endif %}
+              {% if req.acta is True%}
+              <tr>
+                <td>Acta de Grado</td>
+              </tr>
+              {% endif %}
+            </table>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-primary"> 
+    <div class="panel-heading"> 
+      <h3 class="panel-title">Documentos de la Solicitud</h3> 
+    </div> 
+    <div class="panel-body">
+      <div class="bs-example widget-shadow" data-example-id="hoverable-table"> 
+        <table class="table table-hover">
+          <thead>
+            <tr> 
+              <th>ID</th> <th>Titulo</th> <th>Tipo</th> <th> </th>
+            </tr> 
+          </thead> 
+          <tbody>
+            {% for item in list_documents %}
+            <form id="purchase" action="" method="post" name="purchase"></form> 
+              <tr> 
+                <th scope="row">{{item.id}}</th> 
+                <td>
+                  {{item.titulo}}
+                </td> 
+                <td>
+                  {% if item.tipo_documento == 'C' %}Certificados{% else %}Legalizados{% endif %}
+                </td>
+                <td>
+                  <td><a href="../../../{{ item.archivo.url }}" class="btn btn-primary btn-sm" target="_blank">Ver</a></td>
+                </td>
+              </tr>
+            {% endfor %}  
+          </tbody> 
+        </table>
+      </div>
+    </div>
+  </div>
+
+    <div class="widget-shadow " data-example-id="basic-forms">
+      <div class="form-body">
+        <center>
+          <form action="{% url 'update_request_cancel' req.request_id %}" method="post">
+            {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Cancelar</button>
+            </form>
+            <br>
+          <form action="{% url 'update_request_autority_certification' req.request_id %}" method="post">
+          {% csrf_token %}
+            <label for="inputEmail3" class="col-sm-2 control-label">Token AC</label>
+            <div class="col-sm-8">
+              <input type="text" name="token" class="form-control" id="token" placeholder="9slgbknb...">
+            </div>
+            <button type="submit" class="btn btn-primary">Procesar</button>
+          </form>
+        </center>
+      </div>
+    </div>
+
+{% endblock content %}

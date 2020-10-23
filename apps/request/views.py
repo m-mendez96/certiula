@@ -1,10 +1,16 @@
 from django.views.generic import ListView, View, UpdateView
 from django.views.generic.edit import FormView
 from django.shortcuts import render, redirect
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
 from apps.user.models import *
 from apps.document.forms import *
+from apps.document.models import *
 from .forms import *
 from .models import Request
+import requests
 
 ## Crear Solicitud de Documentos
 class Create_Request(View):
@@ -109,3 +115,58 @@ class Update_Request_Cancel(View):
         req.estado = 'C'
         req.save()
         return redirect('initial_user')
+
+## Obtener Solicitudes Autoridad de Certificación (Natali)
+class Get_Requests_Autoritiy_Certification(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        list_requests = Request.objects.filter(estado='P-UP')
+        return render(request, 'request/get_requests_autority_certification.html',{'usuario':usuario, 'user':user,'list_requests':list_requests})
+
+## Ver Solicitud Autoridad de Certificación
+class Get_Request_Autority_Certification(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        req = Request.objects.get(request_id=pk)
+        list_documents = Document.objects.filter(request=req)
+        return render(request, 'request/get_request_autority_certifcation.html',{'usuario':usuario, 'user':user,'req':req,'list_documents':list_documents})
+
+## Procesar Solicitud Autoridad de Certificación
+class Update_Request_Autority_Certification(View):
+    def post(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        req = Request.objects.get(request_id=pk)
+        if req.usuario.registro_blockchain is False:
+            token = '%s'%request.POST['token'] # Token AC 
+            headers = { "Authorization": "Token {}".format(token)}
+            payload = {
+                'owner': '%s'%req.usuario.cuenta_blockchain,
+                'name': '%s'%req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,
+                'id': '%s'%req.usuario.identificacion,
+                'id_number':1000+req.request_id,
+                'email': '%s'%req.usuario.usuario.email}
+            url = "http://127.0.0.1:8080/api/register/recipient/"
+            response = requests.post(url, data=payload, headers=headers)
+            if response.status_code == 200:
+                req.usuario.registro_blockchain = True
+                r = response.json()
+                token = '%s'%r['token'] ## Token Beneficiario
+                current_site = get_current_site(request)
+                mail_subject = 'Registro de Beneficiario'
+                message = render_to_string('user/email_register_recipient.html', {
+                    'user': req.usuario.usuario,
+                    'token':token,
+                })
+                text_content = strip_tags(message)
+                to_email = req.usuario.usuario.email
+                email = EmailMultiAlternatives(
+                    mail_subject, message, to=[to_email]
+                )
+                email.attach_alternative(message, "text/html")
+                email.send()
+        req.estado = 'P-CO'
+        req.save()
+        return redirect('get_requests_autority_certification')

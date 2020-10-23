@@ -23,6 +23,8 @@ from django.views.generic.base import TemplateView
 from apps.user.views import *
 from apps.request.views import *
 from apps.document.views import *
+from . import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     ## Home
@@ -82,6 +84,15 @@ urlpatterns = [
     path('session/funtional_unit/<int:pk>/request/cancel',login_required(Update_Request_Cancel.as_view()), name='update_request_cancel'),
     ## Crear Documentos de Solicitud
     path('session/funtional_unit/create/documents/<int:request_id>',login_required(Create_Documents.as_view()), name='create_documents'),
+    ## Obtener Solicitudes Autoridad de Certificación
+    path('session/certification_authority/requests',login_required(Get_Requests_Autoritiy_Certification.as_view()), name='get_requests_autority_certification'),
+    ## Obtener Solicitud Autoridad de Certificación
+    path('session/certification_authority/<int:pk>/request',login_required(Get_Request_Autority_Certification.as_view()), name='get_request_autority_certification'),
+    ## Procesar Solicitud Autoridad de Certificación
+    path('session/certification_authority/<int:pk>/request/update',login_required(Update_Request_Autority_Certification.as_view()), name='update_request_autority_certification'),
 ]
+
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = 'Administración de Certiula'
