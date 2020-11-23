@@ -57,8 +57,8 @@ urlpatterns = [
     path('logout/',login_required(LogoutView.as_view()), name='logout'),
     ## Autoridad de Acreditación
     path('session/accreditation_authority/',login_required(Accreditation_Authority.as_view()), name='accreditation_authority'),
-    path('register/accreditation_authority/',login_required(Register_Accreditation_Authority.as_view()), name='register_accreditation_authority'),
-    path('register/certification_authority/',login_required(Register_Certification_Authority.as_view()), name='register_certification_authority'),
+    path('session/register/accreditation_authority/',login_required(Register_Accreditation_Authority.as_view()), name='register_accreditation_authority'),
+    path('session/register/certification_authority/',login_required(Register_Certification_Authority.as_view()), name='register_certification_authority'),
     path('session/info/certification_authority', login_required(Info_Certification_Authority.as_view()), name='info_certification_authority'),
     ## Autoridad de Certificación
     path('session/certification_authority/',login_required(Certification_Authority.as_view()), name='certification_authority'),

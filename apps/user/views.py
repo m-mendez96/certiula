@@ -236,7 +236,7 @@ class Register_Accreditation_Authority(View):
             'email': '%s'%request.POST['email']}
         url = "http://127.0.0.1:8080/api/register/accreditation-authority/"
         headers = {}
-        response = requests.post(url, data=payload, headers=headers)
+        response = requests.post(url, json=payload, headers=headers)
         if response.status_code == 200:
             usuario = UserExtension.objects.get(usuario = self.request.user)
             usuario.registro_blockchain = True
