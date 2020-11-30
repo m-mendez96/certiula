@@ -167,6 +167,6 @@ class Update_Request_Autority_Certification(View):
                 )
                 email.attach_alternative(message, "text/html")
                 email.send()
-        req.estado = 'P-CO'
+        req.estado = 'T'
         req.save()
         return redirect('get_requests_autority_certification')

@@ -11,9 +11,6 @@ class Request(models.Model):
         ('P-UR','Procesada Unidad de Receptoria'),
         ('P-UA','Procesada Unidad de Archivo'),
         ('P-UP','Procesada Unidad de Procesamiento'),
-        ('P-CO','Procesada Coordinación'),
-        ('P-SE','Procesada Secretaria'),
-        ('P-RE','Procesada Rectorado'),
         ('T','Concluida'),
         ('C','Cancelada'),
     )

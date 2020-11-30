@@ -8,6 +8,12 @@ class Document(models.Model):
     id = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length = 40, blank=False)
     descripcion = models.CharField(max_length = 70, blank=True)
+    STATE = (
+        ('F-AC','Firmado AC'),
+        ('F-C1','Firmado C1'),
+        ('F-C2','Firmado C2'),
+    )
+    estado = models.CharField(max_length=4, choices=STATE, default=STATE[0][0])
     CATEGORIA = (
         ('T','Titulo'),
         ('N','Notas'),
