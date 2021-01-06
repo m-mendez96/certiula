@@ -12,6 +12,7 @@ class Document(models.Model):
         ('F-AC','Firmado AC'),
         ('F-C1','Firmado C1'),
         ('F-C2','Firmado C2'),
+        ('C','Cancelado'),
     )
     estado = models.CharField(max_length=4, choices=STATE, default=STATE[0][0])
     CATEGORIA = (
@@ -29,6 +30,7 @@ class Document(models.Model):
     archivo = models.FileField(upload_to ='documentos/',blank=False,null = False, default='documentos/default.pdf')
     beneficiario = models.ForeignKey(UserExtension, on_delete =models.CASCADE, blank=False)
     request = models.ForeignKey(Request, on_delete =models.CASCADE, blank=False)
+    add_dependencia = models.BooleanField(blank = True, null = True, default = False)
     
     class Meta:
         verbose_name = 'Documento'

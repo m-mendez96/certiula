@@ -1,0 +1,53 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | get requests {% endblock title %}
+
+{% block image_profile %}<img src="../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">{% endblock image_profile %}
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  <ul class="sidebar-menu">
+    <li class="header"><center>Menú</center></li>
+  </ul>
+</div>
+<!-- /.navbar-collapse -->
+{% endblock menu %}
+
+{% block content %}
+<h2 class="title1">Documentos a Certificar</h2>
+<div class="bs-example widget-shadow" data-example-id="hoverable-table"> 
+  <table class="table table-hover">
+    <thead>
+      <tr> 
+        <th>ID</th> <th>Nombre</th> <th>Apellidos</th> <th>Identificación</th> <th>Fecha de Solicitud</th> <th> </th>
+      </tr> 
+    </thead> 
+    <tbody>
+      {% for item in list_documents %}
+      <form id="purchase" action="" method="post" name="purchase"></form> 
+        <tr> 
+          <th scope="row">{{item.id}}</th> 
+          <td>
+            {{item.beneficiario.usuario.first_name}}
+          </td> 
+          <td>
+            {{item.beneficiario.usuario.last_name}}
+          </td> 
+          <td>
+            {{item.beneficiario.identificacion}}
+          </td>
+          <td>
+            {{item.request.fecha}}
+          </td>
+          <td>
+            <form id="purchase" action="{% url 'get_document_certifier' item.id %}" method="get">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Ver</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}  
+    </tbody> 
+  </table>
+</div>
+{% endblock content %}

@@ -1,0 +1,100 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block image_profile %}<img src="../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">{% endblock image_profile %}
+{% block menu %}
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+  <ul class="sidebar-menu">
+    <li class="header"><center>Menú</center></li>
+  </ul>
+</div>
+<!-- /.navbar-collapse -->
+{% endblock menu %}
+
+{% block content %}
+<h2 class="title1">Documento #{{document.id}}</h2>
+<div class="col-md-12 panel-grids">
+  <div class="panel panel-primary"> 
+    <div class="panel-heading"> 
+      <h3 class="panel-title">Información del Documento</h3> 
+    </div> 
+    <div class="panel-body">
+      <div class="col-md-6 panel-grids">
+        <div class="panel panel-default">
+          <div class="panel-heading"> 
+            <h3 class="panel-title">Datos del Estudiante:</h3>
+          </div>
+          <div class="panel-body">
+            <table class="egt">
+              <tr>
+                <td>Nombre: {{document.beneficiario.usuario.first_name}}</td>
+              </tr>
+              <tr>
+                <td>Apellidos: {{document.beneficiario.usuario.last_name}}</td>
+              </tr>
+              <tr>
+                <td>Identificación: {{document.beneficiario.identificacion}}</td>
+              </tr>
+              <tr>
+                <td>Correo Electronico: {{document.beneficiario.usuario.email}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>  
+      </div>
+      <div class="col-md-6 panel-grids">
+        <div class="panel panel-default"> 
+          <div class="panel-heading"> 
+            <h3 class="panel-title">Datos del Documento:</h3>
+          </div>
+          <div class="panel-body">
+            <table class="egt">
+              <tr>
+                <td>Descripción: {{document.descripcion}}</td>
+              </tr>
+              <tr>
+                <td>Documento:  
+                  {% if document.categoria == 'T' %}Titulo{% endif %}
+                  {% if document.categoria == 'N' %}Notas{% endif %}
+                  {% if document.categoria == 'A' %}Acta de Grado{% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td>Tipo: 
+                  {% if document.tipo_documento == 'L' %}Legalizado{% endif %}
+                  {% if document.tipo_documento == 'C' %}Certificado{% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="widget-shadow " data-example-id="basic-forms">
+      <div class="form-body">
+        <center>
+          <form action="../../../{{ document.archivo.url }}" method="post">
+            {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Ver Archivo</button>
+            </form>
+            <br>
+          <form action="{% url 'update_document_cancel' document.id %}" method="post">
+            {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Cancelar</button>
+            </form>
+            <br>
+          <form action="{% url 'update_document_certifier' document.id %}" method="post">
+          {% csrf_token %}
+            <label for="inputEmail3" class="col-sm-2 control-label">Token Certificador</label>
+            <div class="col-sm-8">
+              <input type="text" name="token" class="form-control" id="token" placeholder="9slgbknb...">
+            </div>
+            <button type="submit" class="btn btn-primary">Procesar</button>
+          </form>
+        </center>
+      </div>
+    </div>
+{% endblock content %}

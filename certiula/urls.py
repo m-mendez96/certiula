@@ -90,6 +90,14 @@ urlpatterns = [
     path('session/certification_authority/<int:pk>/request',login_required(Get_Request_Autority_Certification.as_view()), name='get_request_autority_certification'),
     ## Procesar Solicitud Autoridad de Certificación
     path('session/certification_authority/<int:pk>/request/update',login_required(Update_Request_Autority_Certification.as_view()), name='update_request_autority_certification'),
+    ## Obtener Documentos Certificadores
+    path('session/certifier/documents/signature',login_required(Get_Documents_Certifiers.as_view()), name='get_documents_certifiers'),
+    ## Obtener Documento Certificador
+    path('session/certifier/document/<int:pk>',login_required(Get_Document_Certifier.as_view()), name='get_document_certifier'),
+    ## Cancelar Documento Certificador
+    path('session/certifier/<int:pk>/document/cancel',login_required(Update_Document_Cancel.as_view()), name='update_document_cancel'),
+    ## Procesar/Firmar Documento Certificardor
+    path('session/certifier/document/<int:pk>/signature/',login_required(Update_Document_Certifier.as_view()), name='update_document_certifier'),
 ]
 
 if settings.DEBUG:

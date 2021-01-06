@@ -428,6 +428,6 @@ class Certifier(View):
         usuario = UserExtension.objects.get(usuario = self.request.user)
         autoridad = Authority.objects.get(usuario__usuario = user)
         if usuario.registro_blockchain == True and autoridad.tipo == 'C':
-            return render(request, 'user/certifier.html',{'usuario':usuario, 'user':user})
+            return redirect('get_documents_certifiers')
         else:
             return redirect('logout')
