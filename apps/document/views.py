@@ -1,6 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, View, UpdateView
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
+from django.core.mail import EmailMessage
 from apps.user.models import *
 from apps.request.models import *
 from django.conf import settings
@@ -14,13 +19,13 @@ class Create_Documents(View):
         usuario = None
         req = Request.objects.get(request_id=request_id)
         if req.titulo is True:
-            titulo = Document(titulo='Titulo de '+req.titulo_obtenido,descripcion='Titulo de '+req.titulo_obtenido+ ' de '+req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,categoria='T',tipo_documento=req.tipo,archivo=request.FILES['titulo'],beneficiario=req.usuario,request=req)
+            titulo = Document(titulo='Titulo de '+req.titulo_obtenido,descripcion='de '+req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,categoria='T',tipo_documento=req.tipo,archivo=request.FILES['titulo'],beneficiario=req.usuario,request=req)
             titulo.save()
         if req.notas is True:
-            notas = Document(titulo='Notas de '+req.titulo_obtenido,descripcion='Notas de '+req.titulo_obtenido+ ' de '+req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,categoria='N',tipo_documento=req.tipo,archivo=request.FILES['notas'],beneficiario=req.usuario,request=req)
+            notas = Document(titulo='Notas de '+req.titulo_obtenido,descripcion='de '+req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,categoria='N',tipo_documento=req.tipo,archivo=request.FILES['notas'],beneficiario=req.usuario,request=req)
             notas.save()
         if req.acta is True:
-            acta = Document(titulo='Acta de Grado de '+req.titulo_obtenido,descripcion='Acta de Grado de '+req.titulo_obtenido+ ' de '+req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,categoria='A',tipo_documento=req.tipo,archivo=request.FILES['acta'],beneficiario=req.usuario,request=req)
+            acta = Document(titulo='Acta de Grado de '+req.titulo_obtenido,descripcion='de '+req.usuario.usuario.first_name+' '+req.usuario.usuario.last_name,categoria='A',tipo_documento=req.tipo,archivo=request.FILES['acta'],beneficiario=req.usuario,request=req)
             acta.save()
         req.estado = 'P-UP'
         req.save()
@@ -60,40 +65,38 @@ class Update_Document_Cancel(View):
         document.save()
         return redirect('get_documents_certifiers')
 
-## Procesar Solicitud Autoridad de Certificación
+## Procesar Solicitud Ceriticador 1
 class Update_Document_Certifier(View):
     def post(self,request,pk=None,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
         usuario = UserExtension.objects.get(usuario = self.request.user) 
         document = Document.objects.get(id=pk)
-        if usuario.registro_blockchain is True:
+        if document.beneficiario.registro_blockchain is True:
             token = '%s'%request.POST['token'] # Token Certifier 
             headers = { "Authorization": "Token {}".format(token)}
             payload = {
-	            'recipient_address': '0x5A6fc1A1Ffe396567351D9828D9F4e0E109cce5a', # Is Address not Account
-                'title': 'Titulo de Ing',
-                'description': 'Description of Document'
+	            'recipient_address': '%s'%document.beneficiario.address_blockchain, # Is Address not Account
+                'title': '%s'%document.titulo,
+                'description': '%s'%document.descripcion
             }
             url = f"{settings.CERTSGEN_URL}/api/register/certificate/"
-            print(payload,headers)
             response = requests.post(url, json=payload, headers=headers)
-            print(response.content)
             if response.status_code == 200:
                 document.estado = 'F-C1'
                 r = response.json()
-                token = '%s'%r['token'] ## Token Certificado # Here is not funtional
+                document.address_blockchain = '%s'%r['certificate_address'] ## Certificate Addresss
+                document.save()
                 current_site = get_current_site(request)
                 mail_subject = 'Certificado Registrado'
                 message = render_to_string('document/email_register_certificate.html', {
                     'user': document.beneficiario,
-                    'token':token,
+                    'certificate_address':'%s'%r['certificate_address'],
                 })
                 text_content = strip_tags(message)
-                to_email = req.usuario.usuario.email
+                to_email = document.beneficiario.usuario.email
                 email = EmailMultiAlternatives(
                     mail_subject, message, to=[to_email]
                 )
                 email.attach_alternative(message, "text/html")
                 email.send()
-        document.save()
         return redirect('get_documents_certifiers')

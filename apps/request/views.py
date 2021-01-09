@@ -154,6 +154,7 @@ class Update_Request_Autority_Certification(View):
             if response.status_code == 200:
                 req.usuario.registro_blockchain = True
                 r = response.json()
+                req.usuario.address_blockchain = '%s'%r['address']
                 token = '%s'%r['token'] ## Token Beneficiario
                 current_site = get_current_site(request)
                 mail_subject = 'Registro de Beneficiario'
@@ -168,6 +169,7 @@ class Update_Request_Autority_Certification(View):
                 )
                 email.attach_alternative(message, "text/html")
                 email.send()
+                req.usuario.save()
         req.estado = 'T'
         req.save()
         return redirect('get_requests_autority_certification')
