@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, View, UpdateView
 from apps.user.models import *
 from apps.request.models import *
+from django.conf import settings
 from .models import *
 import requests
 
@@ -73,7 +74,7 @@ class Update_Document_Certifier(View):
                 'title': 'Titulo de Ing',
                 'description': 'Description of Document'
             }
-            url = "http://127.0.0.1:8080/api/register/certificate/"
+            url = f"{settings.CERTSGEN_URL}/api/register/certificate/"
             print(payload,headers)
             response = requests.post(url, json=payload, headers=headers)
             print(response.content)

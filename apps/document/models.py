@@ -30,7 +30,9 @@ class Document(models.Model):
     archivo = models.FileField(upload_to ='documentos/',blank=False,null = False, default='documentos/default.pdf')
     beneficiario = models.ForeignKey(UserExtension, on_delete =models.CASCADE, blank=False)
     request = models.ForeignKey(Request, on_delete =models.CASCADE, blank=False)
+    address_blockchain = models.CharField(max_length=64, blank= False, default = " ")
     add_dependencia = models.BooleanField(blank = True, null = True, default = False)
+    is_validated = models.BooleanField(blank = True, null = True, default = False)
     
     class Meta:
         verbose_name = 'Documento'

@@ -8,6 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 from apps.user.models import *
 from apps.document.forms import *
 from apps.document.models import *
+from django.conf import settings
 from .forms import *
 from .models import Request
 import requests
@@ -148,7 +149,7 @@ class Update_Request_Autority_Certification(View):
                 'id': '%s'%req.usuario.identificacion,
                 'id_number':1000+req.request_id,
                 'email': '%s'%req.usuario.usuario.email}
-            url = "http://127.0.0.1:8080/api/register/recipient/"
+            url = f"{settings.CERTSGEN_URL}/api/register/recipient/"
             response = requests.post(url, json=payload, headers=headers)
             if response.status_code == 200:
                 req.usuario.registro_blockchain = True

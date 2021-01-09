@@ -19,6 +19,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from web3 import Web3, HTTPProvider
+from django.conf import settings
 from .models import *
 from .forms import *
 from .tokens import account_activation_token
@@ -234,7 +235,7 @@ class Register_Accreditation_Authority(View):
             'id': request.POST['id'],
             'password': '%s'%request.POST['password'],
             'email': '%s'%request.POST['email']}
-        url = "http://127.0.0.1:8080/api/register/accreditation-authority/"
+        url = f"{settings.CERTSGEN_URL}/api/register/accreditation-authority/"
         headers = {}
         response = requests.post(url, json=payload, headers=headers)
         if response.status_code == 200:
@@ -267,7 +268,7 @@ class Register_Certification_Authority(View):
             "username": "%s"%request.POST['username'],
 	        "password": "%s"%request.POST['password']
         }
-        url = "http://127.0.0.1:8080/api/auth/accreditation-authority/"
+        url = f"{settings.CERTSGEN_URL}/api/auth/accreditation-authority/"
         headers = {}
         response = requests.post(url, data=payloadAuth, headers=headers)
         if response.status_code == 200:
@@ -281,7 +282,7 @@ class Register_Certification_Authority(View):
         	'id': request.POST['id'],
         	'email': '%s'%request.POST['email'],
         }
-        url = "http://127.0.0.1:8080/api/register/certification-authority/"
+        url = f"{settings.CERTSGEN_URL}/api/register/certification-authority/"
         headers = { "Authorization": "Token {}".format(token)}
         response = requests.post(url, data=payload, headers=headers)
         if response.status_code == 200:
@@ -353,7 +354,7 @@ class Register_Certifiers(View):
             'id':'%s'%request.POST['id_document'],
         	'email': '%s'%request.POST['email'],
         }
-        url = "http://127.0.0.1:8080/api/register/certifier/"
+        url = f"{settings.CERTSGEN_URL}/api/register/certifier/"
         response = requests.post(url, data=payload, headers=headers)
         if response.status_code == 200:
             r = response.json()
@@ -382,7 +383,7 @@ class Register_Certifiers(View):
                 'id':'%s'%request.POST['id_document1'],
                 'email': '%s'%request.POST['email1'],
             }
-            url = "http://127.0.0.1:8080/api/register/certifier/"
+            url = f"{settings.CERTSGEN_URL}/api/register/certifier/"
             headers = { "Authorization": "Token {}".format(token)}
             response = requests.post(url, data=payload, headers=headers)
             if response.status_code == 200:
