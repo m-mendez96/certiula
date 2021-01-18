@@ -44,7 +44,7 @@ class Get_Documents_Certifiers(View):
                 return render(request, 'document/get_documents_certifiers.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
             elif user.first_name == "Mario":
                 ## Cargo Rector
-                list_documents = Document.objects.filter(request__estado='T', estado='F-C1', tipo_documento='C')
+                list_documents = Document.objects.filter(request__estado='T', estado='F-C1', tipo_documento='C', add_dependencia=True)
                 return render(request, 'document/get_documents_certifiers.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
         else:
             return redirect('logout')
@@ -65,38 +65,86 @@ class Update_Document_Cancel(View):
         document.save()
         return redirect('get_documents_certifiers')
 
-## Procesar Solicitud Ceriticador 1
+## Procesar Solicitud Ceriticadores
 class Update_Document_Certifier(View):
     def post(self,request,pk=None,*args,**kwargs):
         user = User.objects.get(username=self.request.user)
         usuario = UserExtension.objects.get(usuario = self.request.user) 
         document = Document.objects.get(id=pk)
+        if user.first_name == "José María":
+            if document.beneficiario.registro_blockchain is True:
+                token = '%s'%request.POST['token'] # Token Certifier 
+                headers = { "Authorization": "Token {}".format(token)}
+                payload = {
+                    'recipient_address': '%s'%document.beneficiario.address_blockchain, # Is Address not Account
+                    'title': '%s'%document.titulo,
+                    'description': '%s'%document.descripcion
+                }
+                url = f"{settings.CERTSGEN_URL}/api/register/certificate/"
+                response = requests.post(url, json=payload, headers=headers)
+                if response.status_code == 200:
+                    document.estado = 'F-C1'
+                    r = response.json()
+                    document.address_blockchain = '%s'%r['certificate_address'] ## Certificate Addresss
+                    document.save()
+                    current_site = get_current_site(request)
+                    mail_subject = 'Certificado Registrado'
+                    message = render_to_string('document/email_register_certificate.html', {
+                        'user': document.beneficiario,
+                        'certificate_address':'%s'%r['certificate_address'],
+                    })
+                    text_content = strip_tags(message)
+                    to_email = document.beneficiario.usuario.email
+                    email = EmailMultiAlternatives(
+                        mail_subject, message, to=[to_email]
+                    )
+                    email.attach_alternative(message, "text/html")
+                    email.send()
+            return redirect('get_documents_certifiers')
+        elif user.first_name == "Mario":
+            return redirect('get_documents_certifiers')
+
+## Documentos a Agregar Dependencia (Solo documentos certificados y registrados en la blockchain)
+class Add_Dependency_Documents(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        autoridad = Authority.objects.get(usuario__usuario = user)
+        if usuario.registro_blockchain == True and autoridad.tipo == 'AC':
+                list_documents = Document.objects.filter(request__estado='T', estado ='F-C1', tipo_documento='C', add_dependencia=False)
+                return render(request, 'document/get_documents_add_dependency.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
+        else:
+            return redirect('logout')
+
+## Get Documento Autoridad de Certificación
+class Get_Document_Authority_Certification(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        document = Document.objects.get(id=pk)
+        return render(request, 'document/get_document.html',{'usuario':usuario, 'user':user,'document':document})
+
+
+## Agregar Dependencia de Certificación a un Documento
+class Update_Document_Certification_Authority(View):
+    def post(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user) 
+        document = Document.objects.get(id=pk)
+        certifier1 = Authority.objects.get(cargo='S')
+        certifier2 = Authority.objects.get(cargo='R')
         if document.beneficiario.registro_blockchain is True:
-            token = '%s'%request.POST['token'] # Token Certifier 
+            token = '%s'%request.POST['token'] # Token Authority Certification 
             headers = { "Authorization": "Token {}".format(token)}
             payload = {
-	            'recipient_address': '%s'%document.beneficiario.address_blockchain, # Is Address not Account
-                'title': '%s'%document.titulo,
-                'description': '%s'%document.descripcion
+                'certificate_address': '%s'%document.address_blockchain, # Is Address not Account
+                'from_owner': '%s'%certifier1.usuario.cuenta_blockchain,
+                'to_owner': '%s'%certifier2.usuario.cuenta_blockchain
             }
-            url = f"{settings.CERTSGEN_URL}/api/register/certificate/"
+            url = f"{settings.CERTSGEN_URL}/api/add/certifier-dependency/"
             response = requests.post(url, json=payload, headers=headers)
             if response.status_code == 200:
-                document.estado = 'F-C1'
-                r = response.json()
-                document.address_blockchain = '%s'%r['certificate_address'] ## Certificate Addresss
+                document.add_dependencia = True
                 document.save()
-                current_site = get_current_site(request)
-                mail_subject = 'Certificado Registrado'
-                message = render_to_string('document/email_register_certificate.html', {
-                    'user': document.beneficiario,
-                    'certificate_address':'%s'%r['certificate_address'],
-                })
-                text_content = strip_tags(message)
-                to_email = document.beneficiario.usuario.email
-                email = EmailMultiAlternatives(
-                    mail_subject, message, to=[to_email]
-                )
-                email.attach_alternative(message, "text/html")
-                email.send()
-        return redirect('get_documents_certifiers')
+            return redirect('add_dependency_documents')
+        return redirect('add_dependency_documents')

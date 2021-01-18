@@ -72,6 +72,11 @@ class Authority(models.Model):
     tipo = models.CharField(max_length=2, choices=AUTHORITY_TYPE)
     usuario = models.OneToOneField(UserExtension,on_delete =models.CASCADE, blank = False)
     organizacion_id = models.ForeignKey (Organization, on_delete =models.CASCADE, blank=False)
+    AUTHORITY_CARGO = (
+        ('R','Rector'),
+        ('S','Secretario'),
+    )
+    cargo = models.CharField(max_length=1, choices=AUTHORITY_CARGO, blank=True, null=True)
 
     class Meta:
         verbose_name = 'Autoridad'

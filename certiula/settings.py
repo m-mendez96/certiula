@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'certiulaDB',
         'USER': 'postgres',
-        'PASSWORD': '75634919',
+        'PASSWORD': '85324719',
         'HOST': 'localhost',
         'PORT': 5432
     }
