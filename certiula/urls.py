@@ -104,6 +104,8 @@ urlpatterns = [
     path('session/certification_authority/document/<int:pk>', login_required(Get_Document_Authority_Certification.as_view()), name='get_document'),
     ## Agregar Dependencia de Certificación a Documento
     path('session/certification_authority/document/<int:pk>/add_dependency', login_required(Update_Document_Certification_Authority.as_view()), name='update_document_certification_authority'),
+    ## Obtener Documentos Beneficiario
+    path('session/beneficiary/get/documents/', login_required(Get_Documents_Beneficiary.as_view()), name='get_documents_beneficiary'),
 ]
 
 if settings.DEBUG:

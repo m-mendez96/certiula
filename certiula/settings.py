@@ -81,9 +81,9 @@ CERTSGEN_URL = 'http://127.0.0.1:8081'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'certiulaDB',
+        'NAME': 'certiuladb',
         'USER': 'postgres',
-        'PASSWORD': '85324719',
+        'PASSWORD': '75634919',
         'HOST': 'localhost',
         'PORT': 5432
     }

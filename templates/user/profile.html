@@ -83,6 +83,16 @@
 			  <li><a href="{% url 'create_request' %}"><i class="fa fa-angle-right"></i> Realizar Solicitud</a></li>
 			</ul>
 		</li>
+		<li class="treeview">
+			<a href="#">
+			  <i class="fa fa-folder"></i>
+			  <span>Documentos</span>
+			  <i class="fa fa-angle-left pull-right"></i>
+			</a>
+			<ul class="treeview-menu">
+			  <li><a href="{% url 'get_documents_beneficiary' %}"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
+			</ul>
+		  </li>
 	</ul>
 </div>
 {% endif %}

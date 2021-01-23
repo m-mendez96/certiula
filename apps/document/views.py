@@ -111,7 +111,7 @@ class Update_Document_Certifier(View):
             url = f"{settings.CERTSGEN_URL}/api/add/signature/"
             response = requests.post(url, json=payload, headers=headers)
             if response.status_code == 200:
-                document.is_validated == True
+                document.is_validated = True
                 document.save()   
             return redirect('get_documents_certifiers')
 
@@ -159,3 +159,26 @@ class Update_Document_Certification_Authority(View):
                 document.save()
             return redirect('add_dependency_documents')
         return redirect('add_dependency_documents')
+
+## Obtener Documentos Beneficiario
+class Get_Documents_Beneficiary(View):
+    def get(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        return render(request, 'document/documents_beneficiary.html',{'usuario':usuario, 'user':user})
+
+    def post(self,request,pk=None,*args,**kwargs):
+        user = User.objects.get(username=self.request.user)
+        usuario = UserExtension.objects.get(usuario = self.request.user)
+        token = '%s'%request.POST['token'] # Token Beneficiario
+        headers = { "Authorization": "Token {}".format(token)}
+        url = f"{settings.CERTSGEN_URL}/api/get/certificates/"
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            documents = response.json()
+            for document in documents:
+                i = Document.objects.get(address_blockchain=document["address"])
+                # Mostrar lista de documentos.
+                # Ver Cada Documento Informacion de Registro Blockchain y el Archivo del Documento. 
+                print(document, i)
+        return render(request, 'document/documents_beneficiary.html',{'usuario':usuario, 'user':user})

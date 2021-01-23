@@ -1,7 +1,9 @@
-{% extends './base.html' %}
+{% extends '../user/base.html' %}
 {% load static %}
 
 {% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | account {% endblock title %}
+
+{% block image_profile %}<img src="../../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">{% endblock image_profile %}
 
 {% block menu %}
 {% if usuario is not None %}
@@ -55,7 +57,7 @@
 				  <i class="fa fa-angle-left pull-right"></i>
 				</a>
 				<ul class="treeview-menu">
-				  <li><a href="{% url 'add_dependency_documents' %}"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
+				  <li><a href="{% url 'get_documents_beneficiariy' %}"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
 				</ul>
 			  </li>
 			</ul>
@@ -91,7 +93,7 @@
 				  <i class="fa fa-angle-left pull-right"></i>
 				</a>
 				<ul class="treeview-menu">
-				  <li><a href="{% url 'get_documents_beneficiary' %}"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
+				  <li><a href="#"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
 				</ul>
 			  </li>
 		</ul>
@@ -145,7 +147,7 @@
 								<h2 class="title1">Certificador</h2>
 							{% endif %}
 						{% else %}
-							<h2 class="title1">Cuenta de Usuario</h2>
+							<h2 class="title1">Obtener Documentos Certificados</h2>
 						{% endif %}
 						</div>
 					{% else %}
@@ -163,81 +165,24 @@
 						</div>
 					{% endif %}
 
-					<div class="col-md-12">
-						<div class="wrap">
-							<div class="bg-effect">
-								<ul class="bt-list">
-									<li><a href="#gridSystemModal" class="hvr-icon-rotate col-23" data-target="#gridSystemModal" data-toggle="modal">Modificar<br>Contraseña</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="modal fade" id="gridSystemModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
-							<div class="modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-										<center><h4 class="modal-title" id="gridSystemModalLabel">Modificar Contraseña</h4></center>
-									</div>
-									<div class="modal-body">
-											<div class="form-body">
-												<form action="{% url 'account' %}" method="post">
-													{% csrf_token %}
-													<div class="form-group">
-															<label class="col-md-2 control-label"> </label>
-															<div class="col-md-12">
-																<div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="fa fa-key"></i>
-																	</span>
-																	<input type="password" class="form-control1" placeholder="Contraseña Antigua" name="old_password">
-																</div>
-															</div>
-													</div>
-													<div class="form-group">
-															<label class="col-md-2 control-label"> </label>
-															<div class="col-md-12">
-																<div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="fa fa-key"></i>
-																	</span>
-																	<input type="password" class="form-control1" placeholder="Contraseña Nueva" name="new_password1">
-																</div>
-															</div>
-													</div>
-													<div class="form-group">
-															<label class="col-md-2 control-label"> </label>
-															<div class="col-md-12">
-																<div class="input-group">
-																	<span class="input-group-addon">
-																		<i class="fa fa-key"></i>
-																	</span>
-																	<input type="password" class="form-control1" placeholder="Contraseña Nueva (Confirmación)" name="new_password2">
-																</div>
-															</div>
-													</div>
-													<div class="form-group">
-															<div class="col-md-12">
-																{% if form.errors %}
-    															{% for field in form %}
-        														{% for error in field.errors %}
-            													<p style="color:red;">{{ error|escape }}</p>
-        														{% endfor %}
-    															{% endfor %}
-															{% endif %}
-															</div>
-													</div>
-													<p><br><br></p>
-													<center>
-														<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-														<button type="submit" class="btn btn-primary">Guardar Cambios</button>
-													</center>
-												</form>
-											</div>
-									</div>
+						<!--Form Token Beneficiario -->
+						<div class="form-body">
+							<form class="form-horizontal" action="{% url 'get_documents_beneficiary' %}" method="post" enctype="multipart/form-data">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">Token</label>
+								<div class="col-sm-8">
+								<input type="text" name="token" class="form-control" id="username" placeholder="ej. f704d...">
 								</div>
-							</div><!-- /.modal-content -->
-						</div><!-- /.modal-dialog -->
-					</div>
+								<div class="col-sm-2">
+								<p class="help-block">Token de su registro en la blockchain</p>
+								</div>
+							</div>
+							<center>
+								{% csrf_token %}
+								<button type="submit" class="btn btn-default">Consultar</button>
+							</center>
+							</form>
+						</div>
 
 				<div class="clearfix"></div>
 			</div>
