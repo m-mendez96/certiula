@@ -44,7 +44,7 @@ class Get_Documents_Certifiers(View):
                 return render(request, 'document/get_documents_certifiers.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
             elif user.first_name == "Mario":
                 ## Cargo Rector
-                list_documents = Document.objects.filter(request__estado='T', estado='F-C1', tipo_documento='C', add_dependencia=True)
+                list_documents = Document.objects.filter(request__estado='T', estado='F-C1', tipo_documento='C', add_dependencia=True, is_validated=False)
                 return render(request, 'document/get_documents_certifiers.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
         else:
             return redirect('logout')
@@ -102,6 +102,17 @@ class Update_Document_Certifier(View):
                     email.send()
             return redirect('get_documents_certifiers')
         elif user.first_name == "Mario":
+            token = '%s'%request.POST['token'] # Token Certifier 
+            headers = { "Authorization": "Token {}".format(token)}
+            payload = {
+                'certificate_address': '%s'%document.address_blockchain,
+                'params': f'P.A. {usuario.usuario.first_name} {usuario.usuario.last_name} RectorULA'
+            }
+            url = f"{settings.CERTSGEN_URL}/api/add/signature/"
+            response = requests.post(url, json=payload, headers=headers)
+            if response.status_code == 200:
+                document.is_validated == True
+                document.save()   
             return redirect('get_documents_certifiers')
 
 ## Documentos a Agregar Dependencia (Solo documentos certificados y registrados en la blockchain)
