@@ -25,13 +25,13 @@ FACULTADES_NUCLEOS = (
     )
 
 ## Formulario de Solicitud
-class RequestForm(forms.Form):
-    tipo = forms.ChoiceField(choices = TYPE, label='Tipo de Documentos Solicitados')
-    facultad_nucleo = forms.ChoiceField(choices = FACULTADES_NUCLEOS, label='Facultad o Nucleo')
-    escuela = forms.CharField(max_length=50,required=True, label='Escuela')
-    titulo_obtenido = forms.CharField(max_length=50,required=True, label='Titulo Obtenido')
-    fecha_grado = forms.DateField(required=True, label='Fecha de Grado',input_formats=['dm/%m/%y'])
-    #Documentos Solicitados
-    titulo = forms.BooleanField(required=False,initial=False,label='Titulo')
-    notas = forms.BooleanField(required=False,initial=False,label='Notas')
-    acta = forms.BooleanField(required=False,initial=False,label='Acta de Grado')
+class RequestForm(forms.ModelForm):
+    class Meta:
+        model = Request
+        fields = ['tipo','facultad_nucleo','escuela','titulo_obtenido','fecha_grado','titulo', 'notas', 'acta']
+        widgets = {
+            'escuela':forms.TextInput(attrs={'placeholder': 'ej. Sistemas'}),
+            'titulo_obtenido':forms.TextInput(attrs={'placeholder': 'ej. Ing. de Sistemas'}),
+            'fecha_grado':forms.TextInput(attrs={'placeholder': 'ej. 2010-12-10'}),
+        }
+

@@ -177,8 +177,9 @@ class Get_Documents_Beneficiary(View):
         if response.status_code == 200:
             documents = response.json()
             for document in documents:
-                i = Document.objects.get(address_blockchain=document["address"])
+                list_documents = Document.objects.get(address_blockchain=document["address"])
+                #list_documents = Document.objects.filter(beneficiario=usuario)
                 # Mostrar lista de documentos.
                 # Ver Cada Documento Informacion de Registro Blockchain y el Archivo del Documento. 
-                print(document, i)
-        return render(request, 'document/documents_beneficiary.html',{'usuario':usuario, 'user':user})
+            return render(request, 'document/get_documents_beneficiary.html',{'usuario':usuario, 'user':user, 'list_documents':list_documents})
+        return redirect('get_documents_beneficiary')

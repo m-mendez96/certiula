@@ -1,0 +1,147 @@
+{% extends '../user/base.html' %}
+{% load static %}
+
+{% block title %}Certi ULA :: Sistema de Certificación de Documentos de la Universidad de Los Andes | account {% endblock title %}
+
+{% block image_profile %}<img src="../../../../{{usuario.foto_perfil.url}}" class="img-circle" width="50" height="50">{% endblock image_profile %}
+
+{% block menu %}
+{% if usuario is not None %}
+	{% if usuario_tipo.tipo is not None %}
+		{% if usuario_tipo.tipo == 'AA' %}
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="sidebar-menu">
+				<li class="header"><center>Menú</center></li>
+				<li class="treeview">
+					<a href="#">
+						<i class="fa fa-laptop"></i>
+						<span>OCGRE</span>
+						<i class="fa fa-angle-left pull-right"></i>
+					</a>
+					<ul class="treeview-menu">
+						<li><a href="{% url 'info_certification_authority' %}"><i class="fa fa-angle-right"></i> Consultar OCGRE</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		{% endif %}
+		{% if usuario_tipo.tipo == 'AC' %}
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="sidebar-menu">
+			  <li class="header"><center>Menú</center></li>
+			  <li class="treeview">
+				<a href="#">
+				  <i class="fa fa-laptop"></i>
+				  <span>Certificadores</span>
+				  <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+				  <li><a href="{% url 'register_certifiers' %}"><i class="fa fa-angle-right"></i> Registrar Certificadores</a></li>      
+				  <li><a href="{% url 'info_certifiers' %}"><i class="fa fa-angle-right"></i> Consultar Certificadores</a></li>
+				</ul>
+			  </li>
+			  <li class="treeview">
+				<a href="#">
+					<i class="fa fa-folder"></i>
+				  <span>Solicitudes</span>
+				  <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+				  <li><a href="{% url 'get_requests_autority_certification' %}"><i class="fa fa-angle-right"></i> Solicitudes de Certificación</a></li>      
+				</ul>
+			  </li>
+			  <li class="treeview">
+				<a href="#">
+				  <i class="fa fa-folder"></i>
+				  <span>Documentos</span>
+				  <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+				  <li><a href="{% url 'get_documents_beneficiariy' %}"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
+				</ul>
+			  </li>
+			</ul>
+		  </div>
+		{% endif %}
+		{% if usuario_tipo.tipo == 'C' %}
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="sidebar-menu">
+				<li class="header"><center>Menú</center></li>
+
+			</ul>
+		</div>
+		{% endif %}
+	{% else %}
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="sidebar-menu">
+			<li class="header"><center>Menú</center></li>
+			<li class="treeview">
+				<a href="#">
+				  <i class="fa fa-laptop"></i>
+				  <span>Solicitudes</span>
+				  <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+				  <li><a href="{% url 'get_requests' %}"><i class="fa fa-angle-right"></i> Solicitudes Realizadas</a></li>
+				  <li><a href="{% url 'create_request' %}"><i class="fa fa-angle-right"></i> Realizar Solicitud</a></li>
+				</ul>
+			</li>
+			<li class="treeview">
+				<a href="#">
+				  <i class="fa fa-folder"></i>
+				  <span>Documentos</span>
+				  <i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+				  <li><a href="#"><i class="fa fa-angle-right"></i> Documentos Certificados</a></li>      
+				</ul>
+			  </li>
+		</ul>
+	</div>
+	{% endif %}
+{% else %}
+		{% if usuario_tipo.unidad_id == 'UA' %}
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="sidebar-menu">
+				<li class="header"><center>Menú</center></li>
+
+			</ul>
+		</div>
+		{% endif %}
+		{% if usuario_tipo.unidad_id == 'UP' %}
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="sidebar-menu">
+				<li class="header"><center>Menú</center></li>
+
+			</ul>
+		</div>
+		{% endif %}
+		{% if usuario_tipo.unidad_id == 'UR' %}
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="sidebar-menu">
+				<li class="header"><center>Menú</center></li>
+
+			</ul>
+		</div>
+		{% endif %}
+{% endif %}
+{% endblock menu %}
+
+{% block content %}
+<h2 class="title1">Mis Documentos</h2>
+<div class="bs-example widget-shadow" data-example-id="hoverable-table"> 
+  <table class="table table-hover">
+    {% for item in list_documents %}
+    <h2 class="title1"> </h2>
+    <div class="col-md-12 panel-grids">
+      <div class="panel panel-primary"> 
+        <div class="panel-heading"> 
+          <h3 class="panel-title">Información del Documento</h3> 
+        </div> 
+          <!-- Aqui documento -->
+      </div>
+    </div>
+    {% endfor %}
+  </table>
+</div>
+{% endblock content %}
