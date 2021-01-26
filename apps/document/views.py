@@ -177,12 +177,19 @@ class Get_Documents_Beneficiary(View):
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             documents = response.json()
-            list_documents = {}
+            list_documents = []
+            i = 1
             for document in documents:
                 doc = Document.objects.get(address_blockchain=document["address"])
-                print(doc, document)
-                #list_documents += Document.objects.filter(beneficiario=usuario)
-                # Mostrar lista de documentos.
-                # Ver Cada Documento Informacion de Registro Blockchain y el Archivo del Documento. 
+                item = {
+                    "id": i,
+                    "title": document["title"],
+                    "info": document["info"],
+                    "address": document["address"],
+                    "is_validated": document["is_validated"],
+                    "url": doc.archivo.url,
+                }
+                list_documents.append(item)
+                i = i + 1
             return render(request, 'document/get_documents_beneficiary.html',{'usuario':usuario, 'user':user, 'list_documents':list_documents})
         return redirect('get_documents_beneficiary')
