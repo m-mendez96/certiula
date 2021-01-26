@@ -78,7 +78,7 @@ class Update_Document_Certifier(View):
                 headers = { "Authorization": "Token {}".format(token)}
                 payload = {
                     'recipient_address': '%s'%document.beneficiario.address_blockchain, # Is Address not Account
-                    'title': '%s'%document.titulo,
+                    'title': '%s'%document.titulo[:32],
                     'description': '%s'%document.descripcion
                 }
                 url = f"{settings.CERTSGEN_URL}/api/register/certificate/"
@@ -107,7 +107,7 @@ class Update_Document_Certifier(View):
             headers = { "Authorization": "Token {}".format(token)}
             payload = {
                 'certificate_address': '%s'%document.address_blockchain,
-                'params': f'P.A. {usuario.usuario.first_name} {usuario.usuario.last_name} RectorULA'
+                'params': f'P.A. {usuario.usuario.first_name} {usuario.usuario.last_name}'
             }
             url = f"{settings.CERTSGEN_URL}/api/add/signature/"
             response = requests.post(url, json=payload, headers=headers)
@@ -177,9 +177,11 @@ class Get_Documents_Beneficiary(View):
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             documents = response.json()
+            list_documents = {}
             for document in documents:
-                list_documents = Document.objects.get(address_blockchain=document["address"])
-                #list_documents = Document.objects.filter(beneficiario=usuario)
+                doc = Document.objects.get(address_blockchain=document["address"])
+                print(doc, document)
+                #list_documents += Document.objects.filter(beneficiario=usuario)
                 # Mostrar lista de documentos.
                 # Ver Cada Documento Informacion de Registro Blockchain y el Archivo del Documento. 
             return render(request, 'document/get_documents_beneficiary.html',{'usuario':usuario, 'user':user, 'list_documents':list_documents})
