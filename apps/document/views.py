@@ -38,11 +38,11 @@ class Get_Documents_Certifiers(View):
         usuario = UserExtension.objects.get(usuario = self.request.user)
         autoridad = Authority.objects.get(usuario__usuario = user)
         if usuario.registro_blockchain == True and autoridad.tipo == 'C':
-            if user.first_name == "José María":
+            if autoridad.cargo == "S":
                 ## Cargo Secretaria
                 list_documents = Document.objects.filter(request__estado='T', estado ='F-AC')
                 return render(request, 'document/get_documents_certifiers.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
-            elif user.first_name == "Mario":
+            elif autoridad.cargo == "R":
                 ## Cargo Rector
                 list_documents = Document.objects.filter(request__estado='T', estado='F-C1', tipo_documento='C', add_dependencia=True, is_validated=False)
                 return render(request, 'document/get_documents_certifiers.html',{'usuario':usuario, 'user':user,'list_documents':list_documents})
@@ -71,7 +71,8 @@ class Update_Document_Certifier(View):
         user = User.objects.get(username=self.request.user)
         usuario = UserExtension.objects.get(usuario = self.request.user) 
         document = Document.objects.get(id=pk)
-        if user.first_name == "José María":
+        autoridad = Authority.objects.get(usuario__usuario = user)
+        if autoridad.cargo == "S":
             if document.beneficiario.registro_blockchain is True:
                 token = '%s'%request.POST['token'] # Token Certifier 
                 headers = { "Authorization": "Token {}".format(token)}
@@ -101,7 +102,7 @@ class Update_Document_Certifier(View):
                     email.attach_alternative(message, "text/html")
                     email.send()
             return redirect('get_documents_certifiers')
-        elif user.first_name == "Mario":
+        elif autoridad.cargo == "R":
             token = '%s'%request.POST['token'] # Token Certifier 
             headers = { "Authorization": "Token {}".format(token)}
             payload = {
