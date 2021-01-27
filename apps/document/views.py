@@ -78,7 +78,7 @@ class Update_Document_Certifier(View):
                 headers = { "Authorization": "Token {}".format(token)}
                 payload = {
                     'recipient_address': '%s'%document.beneficiario.address_blockchain, # Is Address not Account
-                    'title': '%s'%document.titulo[:32],
+                    'title': '%s'%document.titulo,
                     'description': '%s'%document.descripcion
                 }
                 url = f"{settings.CERTSGEN_URL}/api/register/certificate/"
@@ -188,8 +188,12 @@ class Get_Documents_Beneficiary(View):
                     "address": document["address"],
                     "is_validated": document["is_validated"],
                     "url": doc.archivo.url,
+                    "tipo": doc.tipo_documento,
                 }
                 list_documents.append(item)
                 i = i + 1
-            return render(request, 'document/get_documents_beneficiary.html',{'usuario':usuario, 'user':user, 'list_documents':list_documents})
+            lista = True
+            if list_documents == []:
+                lista = False
+            return render(request, 'document/get_documents_beneficiary.html',{'usuario':usuario, 'user':user, 'list_documents':list_documents, 'lista':lista,})
         return redirect('get_documents_beneficiary')

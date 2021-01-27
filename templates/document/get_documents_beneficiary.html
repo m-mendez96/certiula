@@ -129,30 +129,51 @@
 
 {% block content %}
 <h2 class="title1">Mis Documentos</h2>
-<div class="col-md-8 compose-right widget-shadow">
-	<div class="panel-default">
-		<div class="panel-heading">
-			Compose New Message 
-		</div>
-		<div class="panel-body">
-			<div class="alert alert-info">
-				Please fill details to send a new message
-			</div>
-			<form class="com-mail">
-				<input type="text" class="form-control1 control3" placeholder="To :">
-				<input type="text" class="form-control1 control3" placeholder="Subject :">
-				<textarea rows="6" class="form-control1 control2" placeholder="Message :" ></textarea>
-				<div class="form-group">
-					<div class="btn btn-default btn-file">
-						<i class="fa fa-paperclip"></i> Attachment
-						<input type="file" name="attachment">
-					</div>
-					<p class="help-block">Max. 32MB</p>
+{% if lista is True %}
+	{% for item in list_documents %}
+		<div class="col-md-8 compose-right widget-shadow">
+			<div class="panel-default">
+				<div class="panel-heading">
+					Certificado #{{item.id}} 
 				</div>
-				<input type="submit" value="Send Message"> 
-			</form>
+				<div class="panel-body">
+					{% if item.is_validated is True and item.tipo == "C" %}
+						<div class="alert alert-success">
+							Certificado Validado por las Autoridades Correspondientes!
+						</div>
+					{% elif item.is_validated is False and item.tipo == "C" %}
+						<div class="alert alert-danger">
+							Certificado sin la firma del rector, solo validado por el secretario.
+						</div>
+					{% else %}
+						<div class="alert alert-warning">
+							Certificado Legalizado!
+						</div>
+					{% endif %}
+					<form class="com-mail">
+						<strong>Documento Certificado:</strong><input type="text" class="form-control1 control3" placeholder="{{item.title}}" disabled="disabled">
+						<strong>Información del Certificado:</strong><input type="text" class="form-control1 control3" placeholder="{{item.info}}" disabled="disabled">
+						<strong>Dirección del Certificado:</strong><input type="text" class="form-control1 control3" placeholder="{{item.address}}" disabled="disabled">
+						<td>
+							<td><a href="../../../../{{item.url }}" class="btn btn-primary btn-sm" target="_blank">Ver Documento</a></td>
+						</td> 
+					</form>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+{% else %}
+	<div class="col-md-8 compose-right widget-shadow">
+		<div class="panel-default">
+			<div class="panel-heading">
+			</div>
+			<div class="panel-body">
+				<div class="alert alert-danger">
+					No tienes documentos certificados!
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
+{% endif %}
 <div class="clearfix"> </div>	
 {% endblock content %}
