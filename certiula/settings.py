@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.user',
     'apps.request',
     'apps.document',
+    'apps.CertsGen',
 ]
 
 MIDDLEWARE = [
